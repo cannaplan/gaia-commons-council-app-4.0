@@ -1,0 +1,223 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Gaia Commons Brand Typography */
+  --font-display: 'Roboto', sans-serif;
+  --font-body: 'Roboto', sans-serif;
+  --font-serif: 'Merriweather', serif;
+
+  /* Gaia Commons Brand Colors */
+  /* Primary: #4CAF50 (soft earthy green) = 122 39% 49% */
+  /* Secondary: #8BC6EC (calming blue) = 204 72% 74% */
+  /* Accent: #FFE082 (vibrant yellow) = 45 100% 75% */
+  /* Background: #F7F7F7 = 0 0% 97% */
+  /* Text: #333333 = 0 0% 20% */
+  
+  --background: 0 0% 97%;
+  --foreground: 0 0% 20%;
+  
+  --primary: 122 39% 49%;
+  --primary-foreground: 0 0% 100%;
+  
+  --secondary: 204 72% 74%;
+  --secondary-foreground: 204 50% 20%;
+  
+  --muted: 0 0% 92%;
+  --muted-foreground: 0 0% 45%;
+  
+  --accent: 45 100% 75%;
+  --accent-foreground: 45 60% 20%;
+  
+  --destructive: 0 70% 60%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 0 0% 88%;
+  --input: 0 0% 88%;
+  --ring: 122 39% 49%;
+  
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 20%;
+  
+  --radius: 0.5rem;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    @apply font-bold tracking-tight text-foreground;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-md border border-white/50 shadow-xl shadow-primary/5;
+  }
+  
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-primary/20;
+  }
+}
+
+/* Dark mode - Gaia Commons */
+.dark {
+  --background: 120 10% 10%;
+  --foreground: 0 0% 95%;
+  
+  --primary: 122 39% 45%;
+  --primary-foreground: 0 0% 100%;
+  
+  --secondary: 204 50% 25%;
+  --secondary-foreground: 204 72% 90%;
+  
+  --muted: 120 10% 18%;
+  --muted-foreground: 0 0% 65%;
+  
+  --accent: 45 90% 50%;
+  --accent-foreground: 45 60% 95%;
+  
+  --destructive: 0 70% 55%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 120 10% 22%;
+  --input: 120 10% 22%;
+  --ring: 122 39% 45%;
+  
+  --card: 120 10% 14%;
+  --card-foreground: 0 0% 95%;
+}
+
+.dark .glass-panel {
+  @apply bg-black/30 backdrop-blur-md border border-white/10 shadow-xl shadow-black/20;
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  nav,
+  footer,
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea,
+  .no-print,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  .card, [class*="card"] {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    box-shadow: none !important;
+  }
+
+  table, [class*="chart"], [class*="Chart"] {
+    visibility: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  body, html {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  @page {
+    margin: 1.5cm;
+  }
+}
+
+/* Mobile-first responsive utilities */
+@layer utilities {
+  .mobile-scroll {
+    @apply overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 md:overflow-visible;
+  }
+  
+  .mobile-stack {
+    @apply flex flex-col gap-4 sm:flex-row sm:items-center;
+  }
+  
+  .mobile-full {
+    @apply w-full sm:w-auto;
+  }
+}
+
+/* High Contrast Mode */
+.high-contrast {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 0%;
+  --primary: 122 80% 30%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 204 100% 30%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 0 0% 90%;
+  --muted-foreground: 0 0% 20%;
+  --accent: 45 100% 45%;
+  --accent-foreground: 0 0% 0%;
+  --border: 0 0% 0%;
+  --input: 0 0% 0%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 0%;
+}
+
+.high-contrast.dark {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+  --primary: 122 80% 60%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 204 100% 70%;
+  --secondary-foreground: 0 0% 0%;
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 85%;
+  --accent: 45 100% 60%;
+  --accent-foreground: 0 0% 0%;
+  --border: 0 0% 100%;
+  --input: 0 0% 100%;
+  --card: 0 0% 10%;
+  --card-foreground: 0 0% 100%;
+}
+
+.high-contrast .glass-panel {
+  @apply bg-white border-2 border-black shadow-none;
+}
+
+.high-contrast.dark .glass-panel {
+  @apply bg-black border-2 border-white shadow-none;
+}
+
+/* Focus styles for keyboard navigation */
+:focus-visible {
+  @apply outline-2 outline-offset-2 outline-primary;
+}
+
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible {
+  @apply ring-2 ring-primary ring-offset-2 ring-offset-background;
+}
+
+/* Skip to main content link for accessibility */
+.skip-link {
+  @apply absolute -top-10 left-0 bg-primary text-primary-foreground px-4 py-2 z-50;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  @apply top-0;
+}
