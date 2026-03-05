@@ -14,6 +14,7 @@ import DAO from "@/pages/DAO";
 import LeechLake from "@/pages/LeechLake";
 import About from "@/pages/About";
 import NotFound from "@/pages/not-found";
+import { Analytics } from "@vercel/analytics/react";
 import './lib/i18n';
 
 function Router() {
@@ -43,6 +44,7 @@ function App() {
                 </a>
                 <Toaster />
                 <Router />
+                <Analytics />
               </ErrorBoundary>
             </TooltipProvider>
           </KeyboardNavProvider>
