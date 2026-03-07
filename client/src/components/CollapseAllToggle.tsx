@@ -1,4 +1,6 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
+import {
+  createContext, useContext, useState, useCallback, type ReactNode
+} from "react";
 import { ChevronsDownUp, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -21,7 +23,7 @@ export function useCollapsibleContext() {
 export function CollapsibleProvider({ children }: { children: ReactNode }) {
   const [globalState, setGlobalState] = useState<boolean | undefined>(undefined);
   const collapseAll = useCallback(() => setGlobalState(false), []);
-  const expandAll   = useCallback(() => setGlobalState(true),  []);
+  const expandAll   = useCallback(() => setGlobalState(true), []);
   return (
     <CollapsibleContext.Provider value={{ globalState, collapseAll, expandAll }}>
       {children}
@@ -37,19 +39,40 @@ export default function CollapseAllToggle({ className }: { className?: string })
       type="button"
       onClick={isCollapsed ? expandAll : collapseAll}
       className={cn(
-        "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium",
-        "border border-slate-200 dark:border-slate-700",
-        "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300",
-        "hover:bg-slate-50 dark:hover:bg-slate-700",
+        "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg",
+        "text-xs font-medium",
+        "border border-[#1E2433]",
+        "bg-[#141820] text-[#94A3B8]",
+        "hover:bg-[#1A1F2E] hover:text-[#F1F5F9]",
         "transition-colors duration-150 shadow-sm",
         className
       )}
     >
       {isCollapsed ? (
-        <><ChevronsUpDown className="w-3.5 h-3.5" />Expand All</>
+        <>
+          <ChevronsUpDown className="w-3.5 h-3.5" />
+          Expand All
+        </>
       ) : (
-        <><ChevronsDownUp className="w-3.5 h-3.5" />Collapse All</>
+        <>
+          <ChevronsDownUp className="w-3.5 h-3.5" />
+          Collapse All
+        </>
       )}
     </button>
   );
 }
+```
+
+**Step 3** — Commit message:
+```
+feat: add CollapseAllToggle and CollapsibleProvider
+```
+
+---
+
+## ✅ TASK 3 of 4 — Replace HealthIndicator.tsx
+
+**Step 1** — Go to this URL, click ✏️, press Command+A, then Delete:
+```
+https://github.com/cannaplan/gaia-commons-council-app-4.0/blob/main/client/src/components/HealthIndicator.tsx
