@@ -1,30 +1,8 @@
-export { default } from "./DashboardContent";
+// placeholder
 ```
 
-Wait — that won't work without the original file. Here's the real fix:
+Commit that directly to main. That will at least stop the bleeding and get Render to stop failing on that file while we fix it properly.
 
----
-
-## The actual fix — revert Dashboard.tsx to the last working version
-
-**Step 1** — Go here:
+Then immediately go here and click the **Rollback** button next to the last green successful deploy:
 ```
-https://github.com/cannaplan/gaia-commons-council-app-4.0/commits/main/client/src/pages/Dashboard.tsx
-```
-
-**Step 2** — You'll see a list of commits for that file. Find the one **just before** the Copilot restructure commits — it will say something like `"Add CollapsibleProvider to Dashboard component"` or similar. Click on it.
-
-**Step 3** — You'll see the old file. Click the `< >` button (Browse files at this point) or look for **"View file"**.
-
-**Step 4** — Click the **Raw** button at the top right of the file. Press **Command+A** then **Command+C** to copy everything.
-
-**Step 5** — Go back to:
-```
-https://github.com/cannaplan/gaia-commons-council-app-4.0/blob/main/client/src/pages/Dashboard.tsx
-```
-
-Click ✏️ → **Command+A** → **Delete** → **Command+V** to paste the clean working version.
-
-**Step 6** — Commit message:
-```
-revert: restore Dashboard.tsx to last working version before Copilot patch
+https://dashboard.render.com
