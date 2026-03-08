@@ -1,8 +1,14 @@
-// placeholder
-```
+import React from 'react';
 
-Commit that directly to main. That will at least stop the bleeding and get Render to stop failing on that file while we fix it properly.
-
-Then immediately go here and click the **Rollback** button next to the last green successful deploy:
-```
-https://dashboard.render.com
+export default function Dashboard() {
+  return (
+    <main className="p-8">
+      <h1 className="text-3xl font-bold">
+        Gaia Commons Dashboard
+      </h1>
+      <p className="mt-4 text-lg">
+        Dashboard content coming soon.
+      </p>
+    </main>
+  );
+}
