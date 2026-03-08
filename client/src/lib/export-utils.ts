@@ -1,6 +1,6 @@
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-import ExcelJS from 'exceljs';
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import ExcelJS from "exceljs";
 
 export interface ExportData {
   title: string;
@@ -14,7 +14,7 @@ export async function exportToPDF(
 ): Promise<void> {
   const element = document.getElementById(elementId);
   if (!element) {
-    console.error('Element not found:', elementId);
+    console.error("Element not found:", elementId);
     return;
   }
 
@@ -23,7 +23,7 @@ export async function exportToPDF(
       scale: 2,
       useCORS: true,
       logging: false,
-      backgroundColor: '#ffffff',
+      backgroundColor: "#ffffff",
     });
 
     const imgWidth = 210; // A4 width in mm
@@ -32,22 +32,22 @@ export async function exportToPDF(
     let heightLeft = imgHeight;
     let position = 0;
 
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF("p", "mm", "a4");
+    const imgData = canvas.toDataURL("image/png");
 
-    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
     heightLeft -= pageHeight;
 
     while (heightLeft > 0) {
       position = heightLeft - imgHeight;
       pdf.addPage();
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
     }
 
     pdf.save(`${filename}.pdf`);
   } catch (error) {
-    console.error('Error exporting to PDF:', error);
+    console.error("Error exporting to PDF:", error);
   }
 }
 
@@ -59,13 +59,18 @@ export async function exportToExcel(
     const workbook = new ExcelJS.Workbook();
 
     data.forEach((sheet) => {
-      const worksheet = workbook.addWorksheet(sheet.title.substring(0, 31));
+      const worksheet = workbook.addWorksheet(
+        sheet.title.substring(0, 31),
+      );
 
       if (!sheet.data || sheet.data.length === 0) return;
 
       const columns =
         sheet.columns ||
-        Object.keys(sheet.data[0]).map((key) => ({ key, label: key }));
+        Object.keys(sheet.data[0]).map((key) => ({
+          key,
+          label: key,
+        }));
 
       worksheet.columns = columns.map((col) => ({
         header: col.label,
@@ -79,26 +84,26 @@ export async function exportToExcel(
           rowData[col.key] = row[col.key];
         });
         worksheet.addRow(rowData);
-      }));
+      });
     });
 
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
 
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
 
-    link.setAttribute('href', url);
-    link.setAttribute('download', `${filename}.xlsx`);
-    link.style.visibility = 'hidden';
+    link.setAttribute("href", url);
+    link.setAttribute("download", `${filename}.xlsx`);
+    link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   } catch (error) {
-    console.error('Error exporting to Excel:', error);
+    console.error("Error exporting to Excel:", error);
   }
 }
 
@@ -108,7 +113,7 @@ export function exportToCSV(
 ): void {
   try {
     if (!data || data.length === 0) {
-      console.error('No data to export');
+      console.error("No data to export");
       return;
     }
 
@@ -119,7 +124,7 @@ export function exportToCSV(
     csvRows.push(
       headers
         .map((h) => `"${String(h).replace(/"/g, '""')}"`)
-        .join(','),
+        .join(","),
     );
 
     // Data rows
@@ -127,40 +132,42 @@ export function exportToCSV(
       const values = headers.map((header) => {
         const value = row[header];
         const stringValue =
-          value === null || value === undefined ? '' : String(value);
+          value === null || value === undefined ? "" : String(value);
         return `"${stringValue.replace(/"/g, '""')}"`;
       });
-      csvRows.push(values.join(','));
+      csvRows.push(values.join(","));
     });
 
-    const csv = csvRows.join('\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const csv = csvRows.join("\n");
+    const blob = new Blob([csv], {
+      type: "text/csv;charset=utf-8;",
+    });
 
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
 
-    link.setAttribute('href', url);
-    link.setAttribute('download', `${filename}.csv`);
-    link.style.visibility = 'hidden';
+    link.setAttribute("href", url);
+    link.setAttribute("download", `${filename}.csv`);
+    link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   } catch (error) {
-    console.error('Error exporting to CSV:', error);
+    console.error("Error exporting to CSV:", error);
   }
 }
 
 export function printElement(elementId: string): void {
   const element = document.getElementById(elementId);
   if (!element) {
-    console.error('Element not found:', elementId);
+    console.error("Element not found:", elementId);
     return;
   }
 
-  const printWindow = window.open('', '_blank');
+  const printWindow = window.open("", "_blank");
   if (!printWindow) {
-    console.error('Could not open print window');
+    console.error("Could not open print window");
     return;
   }
 
