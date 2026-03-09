@@ -9,9 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      # Placeholder so server-side preflight checks do not fail during build.
-      # This is safe for CI: the build bundles code but CI does not need a live DB.
+    env: 
       DATABASE_URL: "postgres://ci:ci@127.0.0.1:5432/ci"
     strategy:
       matrix:
@@ -37,7 +35,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifacts
+          name: build-artifacts-55rt
           path: |
             dist
             **/build
