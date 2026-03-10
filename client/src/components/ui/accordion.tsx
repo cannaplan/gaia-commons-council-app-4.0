@@ -1,10 +1,11 @@
+"use client"
+
 import * as React from "react"
 import * as AccordionPrimitive from "@radix-ui/react-accordion"
 import { ChevronDown } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-
-const Accordion = AccordionPrimitive.Root
+import { useCollapsibleContext } from "@/components/CollapseAllToggle"
 
 const AccordionItem = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Item>,
@@ -36,7 +37,7 @@ const AccordionTrigger = React.forwardRef<
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ))
-AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName
+AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName ?? "AccordionTrigger"
 
 const AccordionContent = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Content>,
@@ -51,6 +52,76 @@ const AccordionContent = React.forwardRef<
   </AccordionPrimitive.Content>
 ))
 
-AccordionContent.displayName = AccordionPrimitive.Content.displayName
+AccordionContent.displayName = AccordionPrimitive.Content.displayName ?? "AccordionContent"
 
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent }
+/**
+ * Accordion (controlled by Collapsible context)
+ *
+ * Usage notes:
+ * - Each AccordionItem SHOULD have a stable `value` prop (string).
+ *   Example:
+ *   <Accordion value={...}>
+ *     <AccordionItem value="item-1">...</AccordionItem>
+ *     <AccordionItem value="item-2">...</AccordionItem>
+ *   </Accordion>
+ *
+ * - The CollapsibleProvider exposes globalState: undefined | true | false
+ *     undefined -> uncontrolled accordion (keeps current behavior)
+ *     false -> collapse all (value = [])
+ *     true -> expand all (value = all item values)
+ */
+export const Accordion: React.FC<React.PropsWithChildren<Record<string, any>>> = ({
+  children,
+  ...props
+}) => {
+  const { globalState } = useCollapsibleContext()
+
+  // Recursively collect `value` props from AccordionItem elements under `children`.
+  const collectValues = (nodes: React.ReactNode): string[] => {
+    const values: string[] = []
+    const helper = (n: React.ReactNode) => {
+      React.Children.forEach(n, (child) => {
+        if (!React.isValidElement(child)) return
+        const c: any = child
+        // If this element is an AccordionItem (or any element with a `value` prop), capture it.
+        if (c.props && typeof c.props.value === "string") {
+          values.push(c.props.value)
+        }
+        // Recurse into children of this element
+        if (c.props && c.props.children) {
+          helper(c.props.children)
+        }
+      })
+    }
+    helper(nodes)
+    return values
+  }
+
+  const itemValues = React.useMemo(() => collectValues(children), [children])
+
+  // Controlled value:
+  // - undefined => don't pass `value` prop (uncontrolled)
+  // - false => collapse all => pass []
+  // - true => expand all => pass all values found
+  const controlledValue: string[] | undefined =
+    globalState === undefined ? undefined : globalState ? itemValues : []
+
+  // Use type="multiple" so multiple items can be open at once.
+  // Only attach `value` prop when controlledValue is not undefined.
+  const rootProps =
+    controlledValue === undefined
+      ? { type: "multiple" as const }
+      : ({ type: "multiple" as const, value: controlledValue } as const)
+
+  return (
+    // spreading rootProps will either include value or not depending on controlledValue
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore - radix types are picky about value type based on type prop
+    <AccordionPrimitive.Root {...rootProps} {...props}>
+      {children}
+    </AccordionPrimitive.Root>
+  )
+}
+Accordion.displayName = "Accordion"
+
+export { AccordionItem, AccordionTrigger, AccordionContent }
