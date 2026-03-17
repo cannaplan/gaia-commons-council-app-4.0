@@ -13,10 +13,6 @@ export default function Dashboard(): JSX.Element {
     <main className="dashboard" style={{ padding: 16 }}>
       <h1 style={{ marginBottom: 12 }}>Gaia Dashboard</h1>
 
-      <CollapsibleCard id="greenhouse" title="Greenhouse 70/30" defaultOpen>
-        <GreenhousePreview />
-      </CollapsibleCard>
-
       <CollapsibleCard id="bom" title="BOM Calculator">
         <BomPreview />
       </CollapsibleCard>
