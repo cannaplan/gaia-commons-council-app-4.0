@@ -1,10 +1,12 @@
 import React from "react";
 import CollapsibleCard from "../components/CollapsibleCard";
-// TODO: update these imports to the actual component paths in your gaia4.0 repo:
 
- * Dashboard page using CollapsibleCard for grouped widgets.
- * Replace the preview components with your real components or inline content.
- */
+// TODO: update these imports to the actual component paths in your gaia4.0 repo:
+/*
+ Dashboard page using CollapsibleCard for grouped widgets.
+ Replace the preview components with your real components or inline content.
+*/
+
 export default function Dashboard(): JSX.Element {
   return (
     <main className="dashboard" style={{ padding: 16 }}>
