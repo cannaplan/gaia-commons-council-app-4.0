@@ -10,11 +10,6 @@ git pull origin main
 # 2. Create feature branch
 git checkout -b "$BRANCH"
 
-# 4. Add BomPreview placeholder if missing
-if [ ! -f client/src/components/BomPreview.tsx ]; then
-  cat > client/src/components/BomPreview.tsx <<'TSX'
-import React from "react";
-
 export default function BomPreview(): JSX.Element {
   return (
     <section style={{ padding: 12 }}>
@@ -23,12 +18,6 @@ export default function BomPreview(): JSX.Element {
     </section>
   );
 }
-TSX
-  git add client/src/components/BomPreview.tsx
-  echo "Created client/src/components/BomPreview.tsx"
-else
-  echo "client/src/components/BomPreview.tsx already exists; skipping placeholder creation"
-fi
 
 # 5. Add cards.css if missing
 if [ ! -f client/src/styles/cards.css ]; then
@@ -70,11 +59,10 @@ fi
 
 # 7. Stage and commit remaining changes
 git add -A
-git commit -m "fix(dashboard): correct component filename casing and add BomPreview/cards.css placeholders to resolve imports and unblock CI"
 
 # 8. Push branch
 git push -u origin "$BRANCH"
 
 echo "Branch pushed: $BRANCH"
 echo "Open a PR from $BRANCH -> main. Run the following to create a PR (requires gh):"
-echo "  gh pr create --base main --head $BRANCH --title \"fix(dashboard): resolve component imports & add placeholders\" --body \"Fix casing for GreenhousePreview, add BomPreview and cards.css placeholders to unblock CI; replace with real components later.\""
+
