@@ -10,14 +10,6 @@ git pull origin main
 # 2. Create feature branch
 git checkout -b "$BRANCH"
 
-# 3. Rename greenhousepreview.tsx -> GreenhousePreview.tsx (case-sensitive rename)
-if [ -f client/src/components/greenhousepreview.tsx ] && [ ! -f client/src/components/GreenhousePreview.tsx ]; then
-  git mv client/src/components/greenhousepreview.tsx client/src/components/GreenhousePreview.tsx
-  echo "Renamed greenhousepreview.tsx -> GreenhousePreview.tsx"
-else
-  echo "greenhousepreview.tsx not found or GreenhousePreview.tsx already exists; skipping rename"
-fi
-
 # 4. Add BomPreview placeholder if missing
 if [ ! -f client/src/components/BomPreview.tsx ]; then
   cat > client/src/components/BomPreview.tsx <<'TSX'
