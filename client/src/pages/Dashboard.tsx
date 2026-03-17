@@ -1,7 +1,7 @@
 import React from "react";
 import CollapsibleCard from "../components/CollapsibleCard";
 // TODO: update these imports to the actual component paths in your gaia4.0 repo:
-import GreenhousePreview from "../components/GreenhousePreview";
+
 import BomPreview from "../components/BomPreview";
 
 /**
