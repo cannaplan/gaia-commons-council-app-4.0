@@ -1,4 +1,4 @@
-cat > tailwind.config.cjs <<'TW'
+// tailwind.config.cjs — CommonJS version for CI
 const typography = require("@tailwindcss/typography");
 const animate = require("tailwindcss-animate");
 
@@ -21,4 +21,3 @@ module.exports = {
   },
   plugins: [animate, typography],
 };
-TW
