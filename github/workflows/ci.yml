@@ -1,6 +1,3 @@
-# CI workflow: typecheck, lint, test, and build (Node + optional Python tests)
-# Replaces previous workflow to ensure devDependencies are installed in CI
-# and to run Python tests (if present) alongside the JS build.
 name: CI
 
 on:
@@ -48,13 +45,11 @@ jobs:
           python -m venv .venv
           . .venv/bin/activate
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          # Ensure pytest is available so tests can run if present
           pip install pytest || true
 
       - name: Run Python tests (if any)
         run: |
           . .venv/bin/activate
-          # Run pytest only if tests/ exists or any test files are present
           if [ -d tests ] || ls tests/*.py >/dev/null 2>&1; then
             pytest -q
           else
