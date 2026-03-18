@@ -74,3 +74,14 @@ The app runs on port 5000.
 ## License
 
 This project is for the benefit of Minnesota students and communities.
+---
+
+## Running the GAIA master platform script (local)
+
+A small helper script was added to run a local simulation and produce artifacts for review.
+
+Quick run
+1. Create and activate a Python 3.10+ virtual environment:
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate

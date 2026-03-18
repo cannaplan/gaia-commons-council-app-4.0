@@ -31,7 +31,7 @@ install:
   <<: *node-image
   stage: install
   script:
-    - npm ci
+    - npm ci --include=dev
   artifacts:
     paths:
       - node_modules/
