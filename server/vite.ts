@@ -1,4 +1,3 @@
-cat > server/vite.ts <<'SV'
 import { type Express } from "express";
 import { createServer as createViteServer, createLogger } from "vite";
 import { type Server } from "http";
@@ -53,4 +52,3 @@ export async function setupVite(server: Server, app: Express) {
     }
   });
 }
-SV
