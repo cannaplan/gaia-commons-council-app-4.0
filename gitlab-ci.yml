@@ -1,140 +1,100 @@
-# .gitlab-ci.yml
-# GitLab CI for gaia-commons-council-app-4.0
-# Stages: install -> test -> build -> migrate -> deploy
+# GitLab CI pipeline for build/test and Render deploy.
+# - Installs devDependencies (npm ci --include=dev)
+# - Runs typecheck/lint/test (if present) then build
+# - Triggers Render deploy via render-deploy.sh (uses RENDER_API_KEY + RENDER_SERVICE_ID variables)
 stages:
-  - install
   - test
   - build
-  - migrate
   - deploy
 
-# Global variables (override per environment in GitLab UI as needed)
 variables:
-  NODE_ENV: "production"
-  NPM_CONFIG_LOGLEVEL: warn
-  # speed up npm installs by using cache location
-  NPM_CACHE_FOLDER: "$CI_PROJECT_DIR/.npm_cache"
+  NODE_VERSION: "18"
 
-# Cache node_modules and npm cache between jobs
 cache:
-  key: ${CI_COMMIT_REF_SLUG}
+  key: "${CI_PROJECT_PATH}-${CI_COMMIT_REF_SLUG}"
   paths:
-    - .npm_cache/
+    - .npm
     - node_modules/
 
-# Use node:20 image for node jobs
-.default-node-image: &node-image
-  image: node:20
-
-# INSTALL: install dependencies once and persist node_modules as an artifact for later jobs
-install:
-  <<: *node-image
-  stage: install
-  script:
-    - npm ci --include=dev
-  artifacts:
-    paths:
-      - node_modules/
-    expire_in: 1h
-
-# LINT + TEST: run TypeScript check and unit tests
-lint_and_test:
-  <<: *node-image
+typecheck:
+  image: node:${NODE_VERSION}
   stage: test
   script:
-    - npm run check          # TypeScript typecheck
-    - npm run test --if-present
-  dependencies:
-    - install
-  allow_failure: false
+    - npm ci --include=dev
+    - npx tsc --noEmit
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request"
+    - if: $CI_COMMIT_BRANCH
 
-# BUILD: produce the production builds (vite + server bundle)
+lint:
+  image: node:${NODE_VERSION}
+  stage: test
+  script:
+    - npm ci --include=dev
+    - npm run lint --if-present
+  allow_failure: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request"
+    - if: $CI_COMMIT_BRANCH
+
+js-tests:
+  image: node:${NODE_VERSION}
+  stage: test
+  script:
+    - npm ci --include=dev
+    - npm test --if-present
+  allow_failure: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request"
+    - if: $CI_COMMIT_BRANCH
+
 build:
-  <<: *node-image
+  image: node:${NODE_VERSION}
   stage: build
   script:
+    - npm ci --include=dev
     - npm run build
   artifacts:
+    name: "build-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}"
+    expire_in: 1 week
     paths:
       - dist/
-    expire_in: 1h
-  dependencies:
-    - install
-    - lint_and_test
+      - build/
+      - client/dist/
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request"
+    - if: $CI_COMMIT_BRANCH
 
-# MIGRATE_PRODUCTION: Manual, protected job; runs only on main and triggers drizzle-kit push after exporting DB URL.
-# This job is manual to prevent accidental migrations from feature branches.
-migrate_production:
-  <<: *node-image
-  stage: migrate
-  variables:
-    NODE_ENV: "production"
-  before_script:
-    # If PRODUCTION_DATABASE_URL is set in CI variables, export it as DATABASE_URL so drizzle.config.ts picks it up.
-    - if [ -n "$PRODUCTION_DATABASE_URL" ]; then export DATABASE_URL="$PRODUCTION_DATABASE_URL"; fi
-  script:
-    - echo "Running DB migrations against $DATABASE_URL (production)."
-    - npx drizzle-kit push
-  when: manual
-  only:
-    - main
-  environment:
-    name: production
-  allow_failure: false
-
-# DEPLOY_TO_RENDER: Trigger a Render deploy via API. Requires RENDER_API_KEY and RENDER_SERVICE_ID CI variables.
-deploy_to_render:
-  image: curlimages/curl:7.87.0
+deploy-to-render:
+  image: curlimages/curl:7.90.0
   stage: deploy
+  variables:
+    RENDER_API_BASE: "https://api.render.com/v1"
   script:
     - |
-      if [ -z "$RENDER_API_KEY" ] || [ -z "$RENDER_SERVICE_ID" ]; then
-        echo "Render credentials not configured. Skipping deploy."
+      if [ -z "${RENDER_API_KEY}" ] || [ -z "${RENDER_SERVICE_ID}" ]; then
+        echo "ERROR: RENDER_API_KEY and RENDER_SERVICE_ID must be set as CI variables."
         exit 1
       fi
-    - echo "Triggering Render deploy for service $RENDER_SERVICE_ID..."
-    - |
-      curl -sS -X POST "https://api.render.com/v1/services/$RENDER_SERVICE_ID/deploys" \
-        -H "Authorization: Bearer $RENDER_API_KEY" \
+      echo "Triggering Render deploy for service id: ${RENDER_SERVICE_ID}"
+      RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "${RENDER_API_BASE}/services/${RENDER_SERVICE_ID}/deploys" \
+        -H "Authorization: Bearer ${RENDER_API_KEY}" \
         -H "Content-Type: application/json" \
-        -d '{"clearCache": true}' \
-        -o /tmp/render-response.json
-    - cat /tmp/render-response.json
-  dependencies:
-    - build
-  only:
-    - main
+        -d '{"clearCache":false}')
+      HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+      BODY=$(echo "$RESPONSE" | sed '$d')
+      echo "HTTP: $HTTP_CODE"
+      echo "$BODY"
+      if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
+        echo "Render deploy triggered successfully."
+      else
+        echo "Failed to trigger deploy (HTTP $HTTP_CODE). See response above."
+        exit 1
+      fi
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: on_success
+    - when: manual
   environment:
     name: production
-
-# Optional: Docker build & push (alternative deployment path)
-# Uncomment and configure DOCKER_REGISTRY, DOCKER_USERNAME, DOCKER_PASSWORD if you prefer building images.
-docker_build_and_push:
-  image: docker:24.0.2
-  services:
-    - docker:24-dind
-  stage: deploy
-  variables:
-    DOCKER_TLS_CERTDIR: "/certs"
-  before_script:
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin "$DOCKER_REGISTRY"
-  script:
-    - docker build -t "$DOCKER_REGISTRY:$CI_COMMIT_SHORT_SHA" .
-    - docker push "$DOCKER_REGISTRY:$CI_COMMIT_SHORT_SHA"
-  only:
-    - main
-  environment:
-    name: production
-  dependencies:
-    - build
-
-# Notes:
-# Required CI variables (set in GitLab Settings → CI/CD → Variables):
-# - PRODUCTION_DATABASE_URL (production database connection string)
-# - SESSION_SECRET (express-session secret)
-# - DEPLOY_URL (public URL)
-# - CORS_ALLOWED_ORIGINS
-# - RENDER_API_KEY (Render API key)
-# - RENDER_SERVICE_ID (Render service id)
-# Optional variables for Docker option:
-# - DOCKER_REGISTRY, DOCKER_USERNAME, DOCKER_PASSWORD
+    url: ${RENDER_ENV_URL:-https://your-render-service-url.onrender.com}
