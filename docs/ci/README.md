@@ -38,9 +38,3 @@ Rollback guidance
 Triggering deploy manually via GitLab API (example)
 - If you need to trigger a job via the GitLab API (example for triggering a pipeline on main):
 
-```bash
-curl -X POST \
-  -H "PRIVATE-TOKEN: <YOUR_GITLAB_TOKEN>" \
-  "https://gitlab.com/api/v4/projects/<PROJECT_ID>/trigger/pipeline" \
-  -F token=<TRIGGER_TOKEN> \
-  -F ref=main
