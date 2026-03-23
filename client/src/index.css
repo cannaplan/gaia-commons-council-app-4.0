@@ -47,6 +47,11 @@
     background-color: hsl(var(--background));
   }
 }
+50| @layer utilities {
+51|   .text-foreground {
+52|     color: hsl(var(--foreground));
+53|   }
+54| }
 @layer base {
   body {
     @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
