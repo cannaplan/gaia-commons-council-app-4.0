@@ -42,7 +42,11 @@
   
   --radius: 0.5rem;
 }
-
+@layer utilities {
+  .bg-background {
+    background-color: hsl(var(--background));
+  }
+}
 @layer base {
   body {
     @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
