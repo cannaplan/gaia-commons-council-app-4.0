@@ -9,13 +9,11 @@ export default defineConfig(async () => {
   const plugins = [react()];
 
   // Try to load optional Replit plugins & runtime overlay only if available.
-  try {
-    const runtimeOverlayModule = await import("@replit/vite-plugin-runtime-error-modal").catch(() => null);
-    if (runtimeOverlayModule) {
-      const runtimeOverlay = runtimeOverlayModule.default || runtimeOverlayModule;
-      if (typeof runtimeOverlay === "function") plugins.push(runtimeOverlay());
-    }
-  } catch {}
+  const runtimeOverlayModule = await import("@replit/vite-plugin-runtime-error-modal").catch(() => null);
+  if (runtimeOverlayModule) {
+    const runtimeOverlay = runtimeOverlayModule.default || runtimeOverlayModule;
+    if (typeof runtimeOverlay === "function") plugins.push(runtimeOverlay());
+  }
 
   if (process.env.NODE_ENV !== "production" && process.env.REPL_ID !== undefined) {
     try {
