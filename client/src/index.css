@@ -47,7 +47,7 @@
     background-color: hsl(var(--background));
   }
 }
-`@layer` utilities {
+@layer utilities {
   .text-foreground {
     color: hsl(var(--foreground));
   }
