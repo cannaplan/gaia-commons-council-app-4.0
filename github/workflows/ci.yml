@@ -45,7 +45,7 @@ jobs:
           python -m venv .venv
           . .venv/bin/activate
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install pytest || true
+          pip install pytest pytest-asyncio || true
 
       - name: Run Python tests (if any)
         run: |
