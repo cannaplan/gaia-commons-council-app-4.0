@@ -78,4 +78,4 @@ git push -u origin "$BRANCH"
 
 echo "Branch pushed: $BRANCH"
 echo "Open a PR from $BRANCH -> main. Run the following to create a PR (requires gh):"
-echo "  gh pr create --base main --head $BRANCH --title \"fix(dashboard): resolve component imports & add placeholders\" --body \"Fix casing for BomPreview and cards.css placeholders to unblock CI; replace with real components later.\""
+echo "  gh pr create --base main --head $BRANCH --title \"fix(dashboard): resolve component imports & add placeholders\" --body \"Add BomPreview and cards.css placeholders to unblock CI; replace with real components later.\""
