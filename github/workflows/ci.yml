@@ -13,6 +13,9 @@ jobs:
   build:
     name: Typecheck, Lint, Test, Build
     runs-on: ubuntu-latest
+    env:
+      CI: true
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -23,8 +26,8 @@ jobs:
           node-version: "18"
           cache: "npm"
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install Node dependencies (including devDependencies)
+        run: npm ci --include=dev
 
       - name: Type check (TS)
         run: npx tsc --noEmit
@@ -32,10 +35,31 @@ jobs:
       - name: Lint (if configured)
         run: npm run lint --if-present
 
-      - name: Run tests (if configured)
+      - name: Install Python 3.10 (for optional Python tests)
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Python deps and pytest (if any)
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install pytest pytest-asyncio || true
+
+      - name: Run Python tests (if any)
+        run: |
+          . .venv/bin/activate
+          if [ -d tests ] || ls tests/*.py >/dev/null 2>&1; then
+            pytest -q
+          else
+            echo "No Python tests found; skipping pytest"
+          fi
+
+      - name: Run JS tests (if configured)
         run: npm test --if-present
 
-      - name: Build
+      - name: Build (frontend/server)
         run: npm run build
 
       - name: Upload build artifact (optional)
@@ -46,3 +70,12 @@ jobs:
           path: |
             build
             dist
+
+      - name: Upload test artifacts (optional)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-output
+          path: |
+            .pytest_cache || true
+            test-results || true
