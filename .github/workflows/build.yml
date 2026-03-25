@@ -13,7 +13,7 @@ jobs:
       DATABASE_URL: "postgres://ci:ci@127.0.0.1:5432/ci"
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [20.x, 22.x] 
 
     steps:
       - name: Checkout repository
