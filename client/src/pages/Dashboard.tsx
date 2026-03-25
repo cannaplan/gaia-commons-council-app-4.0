@@ -1,4 +1,5 @@
 import React from "react";
+import ClusterBuilder from "../components/ClusterBuilder";
 import CollapsibleCard from "../components/CollapsibleCard";
 import {
   useHealth,
@@ -54,9 +55,8 @@ export default function Dashboard(): JSX.Element {
           Timeline
         </button>
       </div>
-
-      <CollapsibleCard id="overview" title="Overview">
-        <div style={{ display: "grid", gap: 12 }}>
+     <CollapsibleCard id="overview" title="Overview">
+         <div style={{ display: "grid", gap: 12 }}>
           <p>
             Status: <strong>{health?.status ?? "unknown"}</strong>
           </p>
@@ -110,6 +110,12 @@ export default function Dashboard(): JSX.Element {
           )}
         </div>
       </CollapsibleCard>
+
+  <CollapsibleCard id="cluster-builder" title="Build Your Own Greenhouse Cluster">
+    <div style={{ marginTop: 8 }}>
+     <ClusterBuilder />
+    </div>
+  </CollapsibleCard>
     </main>
   );
 }
