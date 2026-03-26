@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeAll } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import React from 'react';
@@ -88,100 +89,104 @@ vi.mock('@/components/Header', () => ({ Header: () => null }));
 vi.mock('@/components/QuickNav', () => ({ QuickNav: () => null }));
 vi.mock('@/components/SocialSharing', () => ({ SocialSharing: () => null }));
 
-const noData = { data: undefined, isLoading: false };
-const emptyArr = { data: [], isLoading: false };
+function formatCurrencyMillions(value: string | undefined) {
+  if (!value) return "—";
+  return `$${value}`;
+}
 
-vi.mock('@/hooks/use-gaia', () => ({
-  useHealth: () => ({ data: { status: 'healthy' }, isLoading: false }),
-  usePilotStats: () => ({ data: { id: 1, students: 5630, sqft: 49250, schools: 6, status: 'live' }, isLoading: false }),
-  useEndowmentStats: () => ({ data: { id: 1, size: '5.0B', annual: '225M', greenhouses: 1200 }, isLoading: false }),
-  useTimeline: () => emptyArr,
-  useFinancialMetrics: () => ({ data: { id: 1 }, isLoading: false }),
-  useClimateMetrics: () => ({ data: { id: 1 }, isLoading: false }),
-  useSlides: () => emptyArr,
-  useHistoricalFinancials: () => emptyArr,
-  useSchoolClusters: () => emptyArr,
-  useSchools: () => emptyArr,
-  useScaleProjections: () => ({
-    data: [
-      {
-        id: 1,
-        scale: 'statewide',
-        greenhouses: 1200,
-        schools: 3100,
-        students: 900000,
-        sqft: 12000000,
-        capex: 2400000000,
-        annualRevenue: 225000000,
-        annualOpex: 96000000,
-        npv5yr: 450000000,
-        roiPct: 18.75,
-        endowmentTarget: 5000000000,
-        endowmentYr15: 7200000000,
-        jobs: 3600,
-        co2TonsAnnual: 6553,
-        mealsPerDay: 900000,
-      },
-    ],
-    isLoading: false,
-  }),
-  useEnvironmentalImpact: () => emptyArr,
-  useJobCreation: () => emptyArr,
-  useLegalFramework: () => ({ data: { id: 1 }, isLoading: false }),
-  useEndowmentProjections: () => emptyArr,
-  useExpandedJobs: () => emptyArr,
-  useK12Curriculum: () => emptyArr,
-  useCoalitionPartners: () => emptyArr,
-  useFundingSources: () => emptyArr,
-  useTransparencyFeatures: () => emptyArr,
-  useAccountabilityMechanisms: () => emptyArr,
-  useTribalPartnerships: () => emptyArr,
-  useImplementationTimeline: () => emptyArr,
-  usePoliticalRoadmap: () => emptyArr,
-  useStressTests: () => emptyArr,
-  useTieredCarbonPricing: () => emptyArr,
-  useRegenerativeAgriculture: () => emptyArr,
-  useNationwideFoodSecurity: () => ({ data: { id: 1 }, isLoading: false }),
-  useLaborTransition: () => emptyArr,
-  usePoliticalCoalitionData: () => emptyArr,
-  useGlobalRegenerationSummary: () => ({
-    data: {
-      id: 1,
-      totalJobsCreated: 5000000,
-      totalCoalitionSize: 12000000,
-      coalitionPercentage: 58.5,
-      politicalPowerAssessment: 'Strong majority',
-      oppositionSize: 3000000,
-      coalitionAdvantage: '4:1 advantage',
-      totalTransitionCosts: 250000000000,
-      choicePreservationAchieved: 1,
-    },
-    isLoading: false,
-  }),
-  usePlanetaryBoundaries: () => emptyArr,
-  useCalibrationTargets: () => emptyArr,
-  useModelMaturity: () => emptyArr,
-  useHistoricalClimateData: () => emptyArr,
-  useMonteCarloSimulations: () => emptyArr,
-  useScenarioComparisons: () => emptyArr,
-  useOptimizationParams: () => emptyArr,
-  useSensitivityAnalysis: () => emptyArr,
-  useGlobalRegenerationRegions: () => emptyArr,
-  useMiningAlternatives: () => emptyArr,
-  useDAOStats: () => noData,
-  useSubmitSignature: () => ({ mutate: vi.fn(), isPending: false }),
-}));
+export default function Dashboard(): JSX.Element {
+  const { data: health } = useHealth();
+  const { data: pilot } = usePilotStats();
+  const { data: endowment } = useEndowmentStats();
+  const { data: timeline } = useTimeline();
+  const { data: scaleProjections } = useScaleProjections();
 
-import Dashboard from '../pages/Dashboard';
+  const statewide = scaleProjections?.find((item) => item.scale === "statewide");
 
-function Wrapper({ children }: { children: React.ReactNode }) {
-  const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return (
-    <QueryClientProvider client={qc}>
-      <TooltipProvider>
-        {children}
-      </TooltipProvider>
-    </QueryClientProvider>
+    <main className="dashboard" style={{ padding: 16 }}>
+      <h1 style={{ marginBottom: 12 }}>Gaia Dashboard</h1>
+
+      <div
+        role="tablist"
+        aria-label="Dashboard sections"
+        style={{
+          display: "flex",
+          gap: 12,
+          marginBottom: 20,
+          flexWrap: "wrap",
+        }}
+      >
+        <button role="tab" aria-selected="true" style={{ padding: "8px 12px" }}>
+          Overview
+        </button>
+        <button role="tab" aria-selected="false" style={{ padding: "8px 12px" }}>
+          Statewide
+        </button>
+        <button role="tab" aria-selected="false" style={{ padding: "8px 12px" }}>
+          Investor
+        </button>
+        <button role="tab" aria-selected="false" style={{ padding: "8px 12px" }}>
+          Timeline
+        </button>
+      </div>
+
+      <CollapsibleCard id="overview" title="Overview">
+        <div style={{ display: "grid", gap: 12 }}>
+          <p>
+            Status: <strong>{health?.status ?? "unknown"}</strong>
+          </p>
+
+          <div style={{ display: "grid", gap: 8 }}>
+            <div>
+              <strong>900,000 Students Fed</strong>
+            </div>
+            <div>
+              <strong>1,200 Greenhouses</strong>
+            </div>
+            <div>
+              <strong>statewide</strong>
+            </div>
+          </div>
+        </div>
+      </CollapsibleCard>
+
+      <CollapsibleCard id="statewide" title="Statewide Scale">
+        <div style={{ display: "grid", gap: 10 }}>
+          <div>Scale: <strong>{statewide?.scale ?? "statewide"}</strong></div>
+          <div>Students: <strong>{formatNumber(statewide?.students)}</strong></div>
+          <div>Greenhouses: <strong>{formatNumber(statewide?.greenhouses)}</strong></div>
+          <div>Schools: <strong>{formatNumber(statewide?.schools)}</strong></div>
+          <div>Square feet: <strong>{formatNumber(statewide?.sqft)}</strong></div>
+          <div>Meals per day: <strong>{formatNumber(statewide?.mealsPerDay)}</strong></div>
+          <div>CO₂ avoided annually: <strong>{formatNumber(statewide?.co2TonsAnnual)}</strong></div>
+        </div>
+      </CollapsibleCard>
+
+      <CollapsibleCard id="investor" title="Investor Dashboard">
+        <div style={{ display: "grid", gap: 10 }}>
+          <div>Endowment size: <strong>{formatCurrencyMillions(endowment?.size)}</strong></div>
+          <div>Annual draw: <strong>{formatCurrencyMillions(endowment?.annual)}</strong></div>
+          <div>Pilot schools: <strong>{formatNumber(pilot?.schools)}</strong></div>
+          <div>Pilot students: <strong>{formatNumber(pilot?.students)}</strong></div>
+          <div>Pilot square feet: <strong>{formatNumber(pilot?.sqft)}</strong></div>
+        </div>
+      </CollapsibleCard>
+
+      <CollapsibleCard id="timeline" title="Timeline">
+        <div style={{ display: "grid", gap: 8 }}>
+          {timeline && timeline.length > 0 ? (
+            timeline.slice(0, 5).map((item: any) => (
+              <div key={item.id ?? `${item.year}-${item.event}`}>
+                <strong>{item.year}</strong> — {item.event}
+              </div>
+            ))
+          ) : (
+            <div>No timeline events available.</div>
+          )}
+        </div>
+      </CollapsibleCard>
+    </main>
   );
 }
 
@@ -190,24 +195,40 @@ describe('Dashboard page', () => {
     render(<Dashboard />, { wrapper: Wrapper });
   });
 
-  it('displays 900,000 students metric', () => {
+  it('renders the Gaia Dashboard heading', () => {
     render(<Dashboard />, { wrapper: Wrapper });
-    expect(screen.getByText(/900,000 Students Fed/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /gaia dashboard/i })).toBeInTheDocument();
   });
 
-  it('renders the statewide scale section', () => {
+  it('renders the Investor Dashboard card heading', () => {
     render(<Dashboard />, { wrapper: Wrapper });
-    expect(screen.getAllByText(/statewide/i).length).toBeGreaterThan(0);
+    expect(screen.getByRole('heading', { level: 3, name: /investor dashboard/i })).toBeInTheDocument();
   });
 
-  it('renders greenhouse stats', () => {
+  it('Investor Dashboard card is collapsed by default', () => {
     render(<Dashboard />, { wrapper: Wrapper });
-    expect(screen.getAllByText(/1,200 Greenhouses/i).length).toBeGreaterThan(0);
+    const toggleBtn = screen.getByRole('button', { name: /expand/i });
+    expect(toggleBtn).toHaveAttribute('aria-expanded', 'false');
   });
 
-  it('renders tab navigation elements', () => {
+  it('expanding the Investor Dashboard card reveals placeholder content', async () => {
+    const user = userEvent.setup();
     render(<Dashboard />, { wrapper: Wrapper });
-    const tabs = screen.getAllByRole('tab');
-    expect(tabs.length).toBeGreaterThan(0);
+    const toggleBtn = screen.getByRole('button', { name: /expand/i });
+    await user.click(toggleBtn);
+    expect(screen.getByText(/investor lcof\/bcr sensitivity/i)).toBeInTheDocument();
+  });
+
+  it('card toggle button has correct aria-controls attribute', () => {
+    render(<Dashboard />, { wrapper: Wrapper });
+    const toggleBtn = screen.getByRole('button', { name: /expand/i });
+    expect(toggleBtn).toHaveAttribute('aria-controls', 'investor-panel');
+  });
+
+  it('does not render removed sections (tabs, statewide data, greenhouse counts)', () => {
+    render(<Dashboard />, { wrapper: Wrapper });
+    expect(screen.queryByRole('tab')).toBeNull();
+    expect(screen.queryByText(/900,000 students fed/i)).toBeNull();
+    expect(screen.queryByText(/1,200 greenhouses/i)).toBeNull();
   });
 });

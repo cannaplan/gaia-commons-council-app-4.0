@@ -1,7 +1,7 @@
 # Gaia Commons Council Dashboard
 
-[![CI](https://github.com/cannaplan/Gaia-Commons-council-app-2.1/actions/workflows/ci.yml/badge.svg)](https://github.com/cannaplan/Gaia-Commons-council-app-2.1/actions/workflows/ci.yml)
-[![CD](https://github.com/cannaplan/Gaia-Commons-council-app-2.1/actions/workflows/cd.yml/badge.svg)](https://github.com/cannaplan/Gaia-Commons-council-app-2.1/actions/workflows/cd.yml)
+[![CI](https://github.com/cannaplan/Gaia-Commons-council-app-4.0/actions/workflows/ci.yml/badge.svg)](https://github.com/cannaplan/Gaia-Commons-council-app-4.0/actions/workflows/ci.yml)
+[![CD](https://github.com/cannaplan/Gaia-Commons-council-app-4.0/actions/workflows/cd.yml/badge.svg)](https://github.com/cannaplan/Gaia-Commons-council-app-4.0/actions/workflows/cd.yml)
 
 **"One Vote, Forever Fed" -- 2026 Minnesota Ballot Initiative**
 
@@ -59,7 +59,17 @@ npm run dev
 ```
 
 The app runs on port 5000.
+## Deployment (Render)
 
+This repo includes a `render.yaml` blueprint. The service expects a PostgreSQL database.
+
+- **Node version**: 20.x (see `package.json` `engines`)
+- **Build command**: `npm ci && npm run build`
+- **Start command**: `npm run start`
+- **Required env**:
+  - `DATABASE_URL` (or `PRODUCTION_DATABASE_URL`)
+  - `NODE_ENV=production`
+  - `PORT` (Render sets this automatically, but 5000 works locally)
 ## Funding Sources ($8.65B Total)
 
 - Top 20 Local Corporations (0.4%) -- $1.0B
