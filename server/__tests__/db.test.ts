@@ -176,3 +176,61 @@ describe('server/db.ts module import behaviour', () => {
   it.todo('exported pool uses PRODUCTION_DATABASE_URL when DATABASE_URL is absent');
   it.todo('exports both pool and db named exports');
 });
+
+// ---------------------------------------------------------------------------
+// Suite 4 – Additional regression / boundary tests (PR change)
+// These tests strengthen confidence in the changed logic and guard against
+// regressions where the fallback behaviour might be accidentally removed.
+// ---------------------------------------------------------------------------
+
+describe('additional regression and boundary tests (PR change)', () => {
+  it('exact guard error message matches the updated wording verbatim', () => {
+    const err = buildGuardError();
+    expect(err.message).toBe(
+      'DATABASE_URL (or PRODUCTION_DATABASE_URL) must be set. Did you forget to provision a database?',
+    );
+  });
+
+  it('PRODUCTION_DATABASE_URL alone is sufficient – regression for new fallback behaviour', () => {
+    // Before the PR only DATABASE_URL was checked; this asserts the new path works.
+    const url = resolveDatabaseUrl(undefined, 'postgres://prod-only/mydb');
+    expect(url).toBe('postgres://prod-only/mydb');
+    expect(() => {
+      if (!url) throw buildGuardError();
+    }).not.toThrow();
+  });
+
+  it('non-falsy DATABASE_URL value "0" is treated as truthy and used as-is', () => {
+    // The string "0" is truthy in JavaScript; the OR short-circuit should
+    // return it rather than falling through to PRODUCTION_DATABASE_URL.
+    expect(resolveDatabaseUrl('0', 'postgres://fallback/db')).toBe('0');
+  });
+
+  it('resolution result is a string when DATABASE_URL is provided', () => {
+    const result = resolveDatabaseUrl('postgres://localhost/test', undefined);
+    expect(typeof result).toBe('string');
+  });
+
+  it('resolution result is a string when only PRODUCTION_DATABASE_URL is provided', () => {
+    const result = resolveDatabaseUrl(undefined, 'postgres://prod/db');
+    expect(typeof result).toBe('string');
+  });
+
+  it('guard throws an Error instance (not just any throw)', () => {
+    const url = resolveDatabaseUrl(undefined, undefined);
+    let caught: unknown;
+    try {
+      if (!url) throw buildGuardError();
+    } catch (e) {
+      caught = e;
+    }
+    expect(caught).toBeInstanceOf(Error);
+  });
+
+  it('DATABASE_URL takes precedence even when PRODUCTION_DATABASE_URL has a different host', () => {
+    const primary = 'postgres://primary-host/app';
+    const fallback = 'postgres://fallback-host/app';
+    expect(resolveDatabaseUrl(primary, fallback)).toBe(primary);
+    expect(resolveDatabaseUrl(primary, fallback)).not.toBe(fallback);
+  });
+});
