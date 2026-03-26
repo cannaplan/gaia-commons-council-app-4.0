@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeAll } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import React from 'react';
@@ -190,24 +191,40 @@ describe('Dashboard page', () => {
     render(<Dashboard />, { wrapper: Wrapper });
   });
 
-  it('displays 900,000 students metric', () => {
+  it('renders the Gaia Dashboard heading', () => {
     render(<Dashboard />, { wrapper: Wrapper });
-    expect(screen.getByText(/900,000 Students Fed/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /gaia dashboard/i })).toBeInTheDocument();
   });
 
-  it('renders the statewide scale section', () => {
+  it('renders the Investor Dashboard card heading', () => {
     render(<Dashboard />, { wrapper: Wrapper });
-    expect(screen.getAllByText(/statewide/i).length).toBeGreaterThan(0);
+    expect(screen.getByRole('heading', { level: 3, name: /investor dashboard/i })).toBeInTheDocument();
   });
 
-  it('renders greenhouse stats', () => {
+  it('Investor Dashboard card is collapsed by default', () => {
     render(<Dashboard />, { wrapper: Wrapper });
-    expect(screen.getAllByText(/1,200 Greenhouses/i).length).toBeGreaterThan(0);
+    const toggleBtn = screen.getByRole('button', { name: /expand/i });
+    expect(toggleBtn).toHaveAttribute('aria-expanded', 'false');
   });
 
-  it('renders tab navigation elements', () => {
+  it('expanding the Investor Dashboard card reveals placeholder content', async () => {
+    const user = userEvent.setup();
     render(<Dashboard />, { wrapper: Wrapper });
-    const tabs = screen.getAllByRole('tab');
-    expect(tabs.length).toBeGreaterThan(0);
+    const toggleBtn = screen.getByRole('button', { name: /expand/i });
+    await user.click(toggleBtn);
+    expect(screen.getByText(/investor lcof\/bcr sensitivity/i)).toBeInTheDocument();
+  });
+
+  it('card toggle button has correct aria-controls attribute', () => {
+    render(<Dashboard />, { wrapper: Wrapper });
+    const toggleBtn = screen.getByRole('button', { name: /expand/i });
+    expect(toggleBtn).toHaveAttribute('aria-controls', 'investor-panel');
+  });
+
+  it('does not render removed sections (tabs, statewide data, greenhouse counts)', () => {
+    render(<Dashboard />, { wrapper: Wrapper });
+    expect(screen.queryByRole('tab')).toBeNull();
+    expect(screen.queryByText(/900,000 students fed/i)).toBeNull();
+    expect(screen.queryByText(/1,200 greenhouses/i)).toBeNull();
   });
 });
