@@ -12,7 +12,6 @@ if (!databaseUrl) {
   );
 }
 
-const databaseUrl = process.env.DATABASE_URL;
 const useSSL =
   databaseUrl.includes("sslmode=require") ||
   process.env.NODE_ENV === "production";
