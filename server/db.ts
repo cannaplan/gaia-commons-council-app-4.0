@@ -4,13 +4,14 @@ import * as schema from "@shared/schema";
 
 const { Pool } = pg;
 
-if (!process.env.DATABASE_URL) {
+const databaseUrl =
+  process.env.DATABASE_URL || process.env.PRODUCTION_DATABASE_URL;
+if (!databaseUrl) {
   throw new Error(
-    "DATABASE_URL must be set. Did you forget to provision a database?",
+    "DATABASE_URL (or PRODUCTION_DATABASE_URL) must be set. Did you forget to provision a database?",
   );
 }
 
-const databaseUrl = process.env.DATABASE_URL;
 const useSSL =
   databaseUrl.includes("sslmode=require") ||
   process.env.NODE_ENV === "production";
