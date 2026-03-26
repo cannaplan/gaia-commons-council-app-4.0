@@ -1,5 +1,5 @@
 import React from "react";
-import ClusterBuilder from "../components/ClusterBuilder";
+import ClusterBuilder from "./ClusterBuilder";
 import CollapsibleCard from "../components/CollapsibleCard";
 import {
   useHealth,
