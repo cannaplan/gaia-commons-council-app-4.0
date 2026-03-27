@@ -1,7 +1,7 @@
 # Gaia Commons Council Dashboard
 
-[![CI](https://github.com/cannaplan/Gaia-Commons-council-app-2.1/actions/workflows/ci.yml/badge.svg)](https://github.com/cannaplan/Gaia-Commons-council-app-2.1/actions/workflows/ci.yml)
-[![CD](https://github.com/cannaplan/Gaia-Commons-council-app-2.1/actions/workflows/cd.yml/badge.svg)](https://github.com/cannaplan/Gaia-Commons-council-app-2.1/actions/workflows/cd.yml)
+[![CI](https://github.com/cannaplan/Gaia-Commons-council-app-4.0/actions/workflows/ci.yml/badge.svg)](https://github.com/cannaplan/Gaia-Commons-council-app-4.0/actions/workflows/ci.yml)
+[![CD](https://github.com/cannaplan/Gaia-Commons-council-app-4.0/actions/workflows/cd.yml/badge.svg)](https://github.com/cannaplan/Gaia-Commons-council-app-4.0/actions/workflows/cd.yml)
 
 **"One Vote, Forever Fed" -- 2026 Minnesota Ballot Initiative**
 
