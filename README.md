@@ -59,7 +59,17 @@ npm run dev
 ```
 
 The app runs on port 5000.
+## Deployment (Render)
 
+This repo includes a `render.yaml` blueprint. The service expects a PostgreSQL database.
+
+- **Node version**: 20.x (see `package.json` `engines`)
+- **Build command**: `npm ci && npm run build`
+- **Start command**: `npm run start`
+- **Required env**:
+  - `DATABASE_URL` (or `PRODUCTION_DATABASE_URL`)
+  - `NODE_ENV=production`
+  - `PORT` (Render sets this automatically, but 5000 works locally)
 ## Funding Sources ($8.65B Total)
 
 - Top 20 Local Corporations (0.4%) -- $1.0B
@@ -74,3 +84,14 @@ The app runs on port 5000.
 ## License
 
 This project is for the benefit of Minnesota students and communities.
+---
+
+## Running the GAIA master platform script (local)
+
+A small helper script was added to run a local simulation and produce artifacts for review.
+
+Quick run
+1. Create and activate a Python 3.10+ virtual environment:
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate

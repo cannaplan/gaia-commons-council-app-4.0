@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, useSpring, useTransform } from 'framer-motion';
 
 interface AnimatedCounterProps {
@@ -16,10 +16,10 @@ export function AnimatedCounter({
   prefix = '',
   suffix = '',
   decimals = 0,
-  className = ''
+  className = '',
 }: AnimatedCounterProps) {
   const [isInView, setIsInView] = useState(false);
-  const ref = useRef<HTMLSpanElement>(null);
+  const ref = useRef<HTMLSpanElement | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -29,7 +29,7 @@ export function AnimatedCounter({
           observer.disconnect();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     if (ref.current) {
@@ -39,12 +39,18 @@ export function AnimatedCounter({
     return () => observer.disconnect();
   }, []);
 
-  const spring = useSpring(0, { duration: duration * 1000 });
+  const spring = useSpring(0, {
+    stiffness: 80,
+    damping: 20,
+  });
+
   const display = useTransform(spring, (current) =>
-    prefix + current.toLocaleString(undefined, { 
+    prefix +
+    current.toLocaleString(undefined, {
       minimumFractionDigits: decimals,
-      maximumFractionDigits: decimals 
-    }) + suffix
+      maximumFractionDigits: decimals,
+    }) +
+    suffix,
   );
 
   useEffect(() => {
@@ -55,7 +61,7 @@ export function AnimatedCounter({
 
   return (
     <motion.span ref={ref} className={className}>
-      {display}
+      <motion.span>{display}</motion.span>
     </motion.span>
   );
 }
@@ -75,24 +81,24 @@ export function AnimatedProgress({
   className = '',
   barClassName = '',
   showLabel = true,
-  label = ''
+  label = '',
 }: AnimatedProgressProps) {
   const percentage = Math.min((value / max) * 100, 100);
 
   return (
-    <div className={`w-full ${className}`}>
+    <div className={className}>
       {showLabel && (
-        <div className="flex justify-between text-sm mb-1">
-          <span className="text-muted-foreground">{label}</span>
-          <span className="font-medium">{percentage.toFixed(0)}%</span>
+        <div className="mb-1 flex items-center justify-between text-xs">
+          <span>{label}</span>
+          <span>{percentage.toFixed(0)}%</span>
         </div>
       )}
-      <div className="h-2 bg-muted rounded-full overflow-hidden">
+      <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
         <motion.div
-          className={`h-full bg-primary rounded-full ${barClassName}`}
+          className={barClassName}
           initial={{ width: 0 }}
           animate={{ width: `${percentage}%` }}
-          transition={{ duration: 1, ease: 'easeOut' }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
         />
       </div>
     </div>
@@ -110,29 +116,38 @@ export function AnimatedBadge({
   children,
   variant = 'default',
   pulse = false,
-  className = ''
+  className = '',
 }: AnimatedBadgeProps) {
-  const variants = {
+  const variants: Record<
+    NonNullable<AnimatedBadgeProps['variant']>,
+    string
+  > = {
     default: 'bg-primary/10 text-primary border-primary/20',
     success: 'bg-green-500/10 text-green-600 border-green-500/20',
     warning: 'bg-amber-500/10 text-amber-600 border-amber-500/20',
-    destructive: 'bg-red-500/10 text-red-600 border-red-500/20'
+    destructive: 'bg-red-500/10 text-red-600 border-red-500/20',
   };
 
   return (
     <motion.span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${variants[variant]} ${className}`}
-      initial={{ scale: 0.8, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      className={[
+        'inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium',
+        variants[variant],
+        className,
+      ]
+        .filter(Boolean)
+        .join(' ')}
+      animate={
+        pulse
+          ? { scale: [1, 1.05, 1] }
+          : undefined
+      }
+      transition={
+        pulse
+          ? { duration: 1.2, repeat: Infinity, ease: 'easeInOut' }
+          : undefined
+      }
     >
-      {pulse && (
-        <motion.span
-          className="w-2 h-2 rounded-full bg-current mr-1.5"
-          animate={{ scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        />
-      )}
       {children}
     </motion.span>
   );

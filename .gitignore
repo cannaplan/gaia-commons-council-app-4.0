@@ -1,6 +1,12 @@
 node_modules
 dist
+build
+.cache
+.env
+.env.local
 .DS_Store
 server/public
-vite.config.ts.*
 *.tar.gz
+data/
+data/gaia_v4.1_platform.db
+data/gaia_slide_deck.json

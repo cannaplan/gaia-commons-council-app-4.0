@@ -1,0 +1,3 @@
+cat > requirements.txt <<'TXT'
+python>=3.10
+TXT

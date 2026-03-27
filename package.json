@@ -1,13 +1,18 @@
 {
-  "name": "rest-express",
+  "name": "gaia-commons-council-app-4-0",
   "version": "1.0.0",
   "type": "module",
   "license": "MIT",
+  "engines": {
+    "node": "20.x"
+  },
+  
   "scripts": {
     "dev": "NODE_ENV=development tsx server/index.ts",
     "build": "tsx script/build.ts",
     "start": "NODE_ENV=production node dist/index.cjs",
     "check": "tsc",
+    "verify": "npm run check && npm run test && npm run build",
     "db:push": "drizzle-kit push",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -45,6 +50,7 @@
     "@radix-ui/react-tooltip": "^1.2.0",
     "@tanstack/react-query": "^5.60.5",
     "@types/react-simple-maps": "^3.0.6",
+    "@vercel/analytics": "^1.6.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
