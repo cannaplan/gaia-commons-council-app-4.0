@@ -7,7 +7,7 @@ This project is deployable to Render. Below are recommended steps to connect the
    - Create a new Web Service → Connect to your GitHub repo `cannaplan/gaia-commons-council-app-4.0`.
    - Select the branch to deploy (e.g., `main`).
    - Build Command: `npm run build`
-   - Publish Directory: `build` (for CRA) or `dist`/`build` depending on your setup.
+   - Publish Directory: `dist/public`
    - Render will automatically create deploys for pushes to the connected branch and PR previews for PRs.
 
 2) (Optional) GitHub Actions trigger deploy
@@ -30,4 +30,4 @@ This project is deployable to Render. Below are recommended steps to connect the
 
 6) Troubleshooting
    - If builds fail on Render, download the build logs and ensure `npm ci` and `npm run build` succeed locally.
-   - Confirm publish directory configuration matches your project (CRA uses `build`, Vite uses `dist`).
+   - Confirm publish directory configuration matches your project (this project uses Vite with output configured as `dist/public` in vite.config.ts).

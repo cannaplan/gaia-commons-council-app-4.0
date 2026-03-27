@@ -6,8 +6,8 @@ import { describe, it, expect } from 'vitest';
 //
 // The PR adds three new workflow files that embed bash scripts:
 //   .github/workflows/deploy-to-render.yml
-//   github/workflows/ci.yml                (modified)
-//   github/workflows/.github/workflows/bundle-analyze.yml
+//   ..github/workflows/ci.yml                (modified)
+//   .github/workflows/bundle-analyze.yml
 //
 // These helpers replicate each guard, conditional, and string-construction
 // so we can exercise the logic independently of a live CI runner.
@@ -66,7 +66,7 @@ function getRenderResponseFilePath(): string {
 // ── ci.yml helpers ──────────────────────────────────────────────────────────
 
 /**
- * Replicates the conditional script detection in github/workflows/ci.yml (lines 28-30, 34-36):
+ * Replicates the conditional script detection in .github/workflows/ci.yml (lines 28-30, 34-36):
  *   if npm run | grep -q "scriptName"; then npm run scriptName || true; fi
  *
  * @param npmRunOutput - the stdout of `npm run` (lists available scripts)
@@ -78,7 +78,7 @@ function shouldRunScript(npmRunOutput: string, scriptName: string): boolean {
 }
 
 /**
- * Replicates the test command from github/workflows/ci.yml (line 42):
+ * Replicates the test command from .github/workflows/ci.yml (line 42):
  *   npm test -- --ci --reporters=default
  *
  * Returns the array of arguments that would be passed to npm.
@@ -157,7 +157,7 @@ function isHttpSuccess(httpCode: number): boolean {
 // ── ci.yml build artifact helpers ────────────────────────────────────────────
 
 /**
- * Replicates the artifact upload name from github/workflows/ci.yml (line 49):
+ * Replicates the artifact upload name from .github/workflows/ci.yml (line 49):
  *   name: dashboard-build
  */
 function getBuildArtifactName(): string {
@@ -165,7 +165,7 @@ function getBuildArtifactName(): string {
 }
 
 /**
- * Replicates the artifact upload paths from github/workflows/ci.yml (lines 50-52):
+ * Replicates the artifact upload paths from .github/workflows/ci.yml (lines 50-52):
  *   path: |
  *     build
  *     dist
