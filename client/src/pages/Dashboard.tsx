@@ -25,7 +25,19 @@ export default function Dashboard(): JSX.Element {
   const { data: endowment } = useEndowmentStats();
   const { data: timeline } = useTimeline();
   const { data: scaleProjections } = useScaleProjections();
-
+export default function Dashboard() {
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-50">
+      <div className="container mx-auto px-6 py-12">
+        {/* Your existing grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* CollapsibleCard components */}
+          <CollapsibleCard className="bg-slate-900 border border-slate-800 rounded-xl shadow-xl hover:shadow-2xl" />
+        </div>
+      </div>
+    </div>
+  );
+}
   const statewide = scaleProjections?.find((item) => item.scale === "statewide");
 
   return (
@@ -45,7 +57,7 @@ export default function Dashboard(): JSX.Element {
         <button role="tab" aria-selected="true" style={{ padding: "8px 12px" }}>
           Overview
         </button>
-        <button role="tab" aria-selected="false" style={{ padding: "8px 12px" }}>
+        <CollapsibleCard className="bg-slate-900 border-slate-800" title="...">
           Statewide
         </button>
         <button role="tab" aria-selected="false" style={{ padding: "8px 12px" }}>
@@ -53,7 +65,7 @@ export default function Dashboard(): JSX.Element {
         </button>
         <button role="tab" aria-selected="false" style={{ padding: "8px 12px" }}>
           Timeline
-        </button>
+        <CollapsibleCard className="bg-slate-900 border-slate-800" title="...">
       </div>
      <CollapsibleCard id="overview" title="Overview">
          <div style={{ display: "grid", gap: 12 }}>
@@ -61,7 +73,7 @@ export default function Dashboard(): JSX.Element {
             Status: <strong>{health?.status ?? "unknown"}</strong>
           </p>
 
-          <div style={{ display: "grid", gap: 8 }}>
+          <CollapsibleCard className="bg-slate-900 border-slate-800" title="...">
             <div>
               <strong>900,000 Students Fed</strong>
             </div>
@@ -69,7 +81,7 @@ export default function Dashboard(): JSX.Element {
               <strong>1,200 Greenhouses</strong>
             </div>
             <div>
-              <strong>statewide</strong>
+              <CollapsibleCard className="bg-slate-900 border-slate-800" title="...">
             </div>
           </div>
         </div>
@@ -77,7 +89,7 @@ export default function Dashboard(): JSX.Element {
 
       <CollapsibleCard id="statewide" title="Statewide Scale">
         <div style={{ display: "grid", gap: 10 }}>
-          <div>Scale: <strong>{statewide?.scale ?? "statewide"}</strong></div>
+          <CollapsibleCard className="bg-slate-900 border-slate-800" title="...">
           <div>Students: <strong>{formatNumber(statewide?.students)}</strong></div>
           <div>Greenhouses: <strong>{formatNumber(statewide?.greenhouses)}</strong></div>
           <div>Schools: <strong>{formatNumber(statewide?.schools)}</strong></div>
