@@ -102,14 +102,17 @@ type BundleOutputPattern = (typeof BUNDLE_OUTPUT_PATTERNS)[number];
  *   if ls build/static/js/*.js ...; then ... fi
  *   if ls dist/assets/*.js ...; then ... fi
  *
- * @param availablePaths - the set of directory paths that actually exist on disk
- * @returns the first matching known output path, or null if neither exists
+ * `@param` availableFiles - the set of files matching the bundle output patterns
+ * `@returns` the first matching known output path, or null if neither exists
  */
 function detectBundleOutputPath(
-  availablePaths: string[],
+  availableFiles: string[],
 ): BundleOutputPattern | null {
   for (const pattern of BUNDLE_OUTPUT_PATTERNS) {
-    if (availablePaths.includes(pattern)) {
+    const hasJsMatch = availableFiles.some(
+      (file) => file.startsWith(`${pattern}/`) && file.endsWith('.js'),
+    );
+    if (hasJsMatch) {
       return pattern;
     }
   }
