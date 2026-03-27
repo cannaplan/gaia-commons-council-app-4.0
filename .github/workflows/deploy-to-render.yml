@@ -21,10 +21,13 @@ jobs:
           fi
           echo "Triggering deploy for service ${RENDER_SERVICE_ID}..."
           # Render API: POST /v1/services/{serviceId}/deploys
-          curl -s -X POST "https://api.render.com/v1/services/${RENDER_SERVICE_ID}/deploys" \
+          http_code=$(curl -sS -o /tmp/render-deploy-response.json -w "%{http_code}" -X POST "https://api.render.com/v1/services/${RENDER_SERVICE_ID}/deploys" \
             -H "Authorization: Bearer ${RENDER_API_KEY}" \
             -H "Content-Type: application/json" \
-            -d '{"clearCache": false}' \
-            -o /tmp/render-deploy-response.json
+            -d '{"clearCache": false}')
           echo "Render response:"
           cat /tmp/render-deploy-response.json
+          if [ "$http_code" -lt 200 ] || [ "$http_code" -ge 300 ]; then
+            echo "Render deploy failed (HTTP $http_code)"
+            exit 1
+          fi
