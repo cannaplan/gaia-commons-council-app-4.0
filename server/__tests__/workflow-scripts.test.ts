@@ -6,8 +6,8 @@ import { describe, it, expect } from 'vitest';
 //
 // The PR adds three new workflow files that embed bash scripts:
 //   .github/workflows/deploy-to-render.yml
-//   github/workflows/ci.yml                (modified)
-//   github/workflows/.github/workflows/bundle-analyze.yml
+//   ..github/workflows/ci.yml                (modified)
+//   .github/workflows/bundle-analyze.yml
 //
 // These helpers replicate each guard, conditional, and string-construction
 // so we can exercise the logic independently of a live CI runner.
@@ -67,7 +67,7 @@ function getRenderResponseFilePath(): string {
 // ── ci.yml helpers ──────────────────────────────────────────────────────────
 
 /**
- * Replicates the conditional script detection in github/workflows/ci.yml (lines 28-30, 34-36):
+ * Replicates the conditional script detection in .github/workflows/ci.yml (lines 28-30, 34-36):
  *   if npm run | grep -q "scriptName"; then npm run scriptName || true; fi
  *
  * @param npmRunOutput - the stdout of `npm run` (lists available scripts)
@@ -79,7 +79,7 @@ function shouldRunScript(npmRunOutput: string, scriptName: string): boolean {
 }
 
 /**
- * Replicates the test command from github/workflows/ci.yml (line 42):
+ * Replicates the test command from .github/workflows/ci.yml (line 42):
  *   npm test -- --ci --reporters=default
  *
  * Returns the array of arguments that would be passed to npm.
@@ -145,6 +145,80 @@ function getBundleArtifactName(): string {
  */
 function getBundleReportDir(): string {
   return 'artifact-bundle-report';
+}
+
+// ── deploy-to-render.yml HTTP response code validation ────────────────────────
+
+/**
+ * Replicates the HTTP response-code check from deploy-to-render.yml (lines 29-31):
+ *   if [ "$http_code" -lt 200 ] || [ "$http_code" -ge 300 ]; then exit 1; fi
+ *
+ * Returns true when the status code indicates success (200–299 inclusive),
+ * false when it should trigger exit 1.
+ */
+function isHttpSuccess(httpCode: number): boolean {
+  return httpCode >= 200 && httpCode < 300;
+}
+
+// ── ci.yml build artifact helpers ────────────────────────────────────────────
+
+/**
+ * Replicates the artifact upload name from .github/workflows/ci.yml (line 49):
+ *   name: dashboard-build
+ */
+function getBuildArtifactName(): string {
+  return 'dashboard-build';
+}
+
+/**
+ * Replicates the artifact upload paths from .github/workflows/ci.yml (lines 50-52):
+ *   path: |
+ *     build
+ *     dist
+ */
+function getBuildArtifactPaths(): string[] {
+  return ['build', 'dist'];
+}
+
+/**
+ * Replicates the "Triggering deploy" log line from deploy-to-render.yml (line 22):
+ *   echo "Triggering deploy for service ${RENDER_SERVICE_ID}..."
+ */
+function buildRenderDeployLogMessage(serviceId: string): string {
+  return `Triggering deploy for service ${serviceId}...`;
+}
+
+/**
+ * Replicates the error message printed on deploy failure (line 30):
+ *   echo "Render deploy failed (HTTP $http_code)"
+ */
+function buildRenderDeployFailureMessage(httpCode: number): string {
+  return `Render deploy failed (HTTP ${httpCode})`;
+}
+
+/**
+ * Replicates the "RENDER_API_KEY or RENDER_SERVICE_ID not set" message
+ * from deploy-to-render.yml (line 19):
+ *   echo "RENDER_API_KEY or RENDER_SERVICE_ID not set. Skipping deploy."
+ */
+function buildRenderMissingSecretsMessage(): string {
+  return 'RENDER_API_KEY or RENDER_SERVICE_ID not set. Skipping deploy.';
+}
+
+/**
+ * Replicates the ci.yml job timeout configuration (line 5):
+ *   timeout-minutes: 30
+ */
+function getCiJobTimeoutMinutes(): number {
+  return 30;
+}
+
+/**
+ * Replicates the Node.js version used in the ci.yml and bundle-analyze.yml
+ * workflows (both specify "18").
+ */
+function getWorkflowNodeVersion(): string {
+  return '18';
 }
 
 // ===========================================================================

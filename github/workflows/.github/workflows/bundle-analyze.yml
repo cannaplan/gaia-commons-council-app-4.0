@@ -32,8 +32,8 @@ jobs:
             npx source-map-explorer build/static/js/*.js --html artifact-bundle-report/report.html || true
           fi
           # Vite / other output (dist)
-          if ls dist/assets/*.js 1> /dev/null 2>&1; then
-            npx source-map-explorer dist/assets/*.js --html artifact-bundle-report/report.html || true
+          if ls dist/public/assets/*.js 1> /dev/null 2>&1; then
+            npx source-map-explorer dist/public/assets/*.js --html artifact-bundle-report/report.html || true
           fi
           # If no report produced, create a small pointer
           if [ ! -f artifact-bundle-report/report.html ]; then
