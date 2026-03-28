@@ -9,11 +9,23 @@ import {
   useScaleProjections,
 } from "../hooks/use-gaia";
 
+/**
+ * Format a number using US locale separators or return a placeholder for missing values.
+ *
+ * @param value - The number to format; if `undefined` or `null`, a placeholder is returned
+ * @returns `'—'` when `value` is `undefined` or `null`, otherwise the number formatted with `en-US` locale separators
+ */
 function formatNumber(value?: number | null) {
   if (value === undefined || value === null) return "—";
   return value.toLocaleString("en-US");
 }
 
+/**
+ * Format a numeric input (or numeric string) as US dollars in millions with an `M` suffix.
+ *
+ * @param value - A number or numeric string to format. If `value` is `undefined`, `null`, or an empty string, a placeholder `"—"` is returned. If `value` is a string that cannot be parsed as a number, the original string is returned.
+ * @returns A string like `$1,234.56M` representing `value` divided by 1,000,000, or the placeholder/original string as described above.
+ */
 function formatCurrencyMillions(value?: string | number | null) {
   if (value === undefined || value === null || value === "") return "—";
   const n = typeof value === "string" ? Number(value) : value;
@@ -21,6 +33,14 @@ function formatCurrencyMillions(value?: string | number | null) {
   return `$${(n / 1_000_000).toLocaleString("en-US")}M`;
 }
 
+/**
+ * Render the Gaia Dashboard page with overview, investor, timeline, and builder cards.
+ *
+ * The component fetches dashboard data via GAIA hooks and displays formatted metrics,
+ * timeline events (up to 5), and an interactive cluster builder within collapsible cards.
+ *
+ * @returns The rendered Dashboard page as a JSX.Element
+ */
 export default function Dashboard(): JSX.Element {
   const { data: health } = useHealth();
   const { data: pilot } = usePilotStats();
