@@ -1,0 +1,47 @@
+name: Bundle Analyze (manual)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Attempt bundle analysis (source-map-explorer)
+        # This step will try to analyze generated JS bundles. It is tolerant if source maps / paths differ.
+        run: |
+          set -e
+          mkdir -p artifact-bundle-report
+          # Common CRA output path
+          if ls build/static/js/*.js 1> /dev/null 2>&1; then
+            npx source-map-explorer build/static/js/*.js --html artifact-bundle-report/report.html || true
+          fi
+          # Vite / other output (dist)
+          if ls dist/public/assets/*.js 1> /dev/null 2>&1; then
+            npx source-map-explorer dist/public/assets/*.js --html artifact-bundle-report/report.html || true
+          fi
+          # If no report produced, create a small pointer
+          if [ ! -f artifact-bundle-report/report.html ]; then
+            echo "<html><body><h3>No bundle report produced — adjust bundle-analyze workflow to match your build output.</h3></body></html>" > artifact-bundle-report/report.html
+          fi
+
+      - name: Upload bundle report
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-report
+          path: artifact-bundle-report
