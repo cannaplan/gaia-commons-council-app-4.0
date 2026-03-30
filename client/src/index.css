@@ -2,8 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* -------------------------------------------
+   Global design tokens & typography
+   ------------------------------------------- */
 :root {
-  /* Gaia Commons Brand Typography */
+  /* Typography */
   --font-display: 'Roboto', sans-serif;
   --font-body: 'Roboto', sans-serif;
   --font-serif: 'Merriweather', serif;
@@ -42,16 +45,19 @@
   
   --radius: 0.5rem;
 }
+
 @layer utilities {
   .bg-background {
     background-color: hsl(var(--background));
   }
 }
+
 @layer utilities {
   .text-foreground {
     color: hsl(var(--foreground));
   }
 }
+
 @layer base {
   body {
     @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
