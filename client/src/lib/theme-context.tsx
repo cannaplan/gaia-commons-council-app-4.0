@@ -57,6 +57,15 @@ const schemeStyles: Record<ColorScheme, string> = {
   `
 };
 
+/**
+ * Provides theme context to descendants and applies the currently selected color scheme to the document.
+ *
+ * This component manages the active `colorScheme`, updates a `<style id="theme-colors">` element with
+ * the scheme's CSS variables, and persists the selection to localStorage when possible.
+ *
+ * @param children - React nodes rendered inside the provider
+ * @returns A React provider element that supplies `{ colorScheme, setColorScheme }` to its subtree
+ */
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [colorScheme, setColorScheme] = useState<ColorScheme>(() => {
     if (typeof window !== "undefined") {
@@ -91,6 +100,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * Accesses the current theme context value.
+ *
+ * @returns The theme context containing `colorScheme` and `setColorScheme`.
+ * @throws Error if called outside of a `ThemeProvider`.
+ */
 export function useTheme() {
   const ctx = useContext(ThemeContext);
   if (!ctx) {
