@@ -1,66 +1,195 @@
-@tailwind base; 
-@tailwind components; 
+@tailwind base;
+@tailwind components;
 @tailwind utilities;
 
-/* ------------------------------------------- Global design tokens & typography ------------------------------------------- / :root { / Typography */ --font-display: 'Roboto', sans-serif; --font-body: 'Roboto', sans-serif; --font-serif: 'Merriweather', serif;
+/* -------------------------------------------
+   Global design tokens & typography
+   ------------------------------------------- */
+:root {
+  /* Typography */
+  --font-display: 'Roboto', sans-serif;
+  --font-body: 'Roboto', sans-serif;
+  --font-serif: 'Merriweather', serif;
 
-/* Light theme (defaults) */ --background: 0 0% 97%; --foreground: 0 0% 20%;
+  /* Gaia Commons Brand Colors */
+  /* Primary: #4CAF50 (soft earthy green) = 122 39% 49% */
+  /* Secondary: #8BC6EC (calming blue) = 204 72% 74% */
+  /* Accent: #FFE082 (vibrant yellow) = 45 100% 75% */
+  /* Background: #F7F7F7 = 0 0% 97% */
+  /* Text: #333333 = 0 0% 20% */
+  
+  --background: 0 0% 97%;
+  --foreground: 0 0% 20%;
+  
+  --primary: 122 39% 49%;
+  --primary-foreground: 0 0% 100%;
+  
+  --secondary: 204 72% 74%;
+  --secondary-foreground: 204 50% 20%;
+  
+  --muted: 0 0% 92%;
+  --muted-foreground: 0 0% 45%;
+  
+  --accent: 45 100% 75%;
+  --accent-foreground: 45 60% 20%;
+  
+  --destructive: 0 70% 60%;
+  --destructive-foreground: 0 0% 98%;
 
---primary: 122 39% 49%; --primary-foreground: 0 0% 100%;
+  --border: 0 0% 88%;
+  --input: 0 0% 88%;
+  --ring: 122 39% 49%;
+  
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 20%;
+  
+  --radius: 0.5rem;
+}
 
---secondary: 204 72% 74%; --secondary-foreground: 204 50% 20%;
+/* -------------------------------------------
+   Base layer (applies theme-aware classes via Tailwind tokens)
+   ------------------------------------------- */
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.4;
+  }
 
---muted: 0 0% 92%; --muted-foreground: 0 0% 45%;
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    @apply font-bold tracking-tight text-foreground;
+  }
 
---accent: 45 100% 75%; --accent-foreground: 45 60% 20%;
+  a {
+    color: hsl(var(--primary) / 1);
+    text-decoration: none;
+  }
+}
 
---destructive: 0 70% 60%; --destructive-foreground: 0 0% 98%;
+/* -------------------------------------------
+   Utility layer: small helper classes
+   ------------------------------------------- */
+@layer utilities {
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-md border border-white/50 shadow-xl;
+  }
 
---border: 0 0% 88%; --input: 0 0% 88%; --ring: 122 39% 49%;
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-primary/20;
+  }
+}
 
---card: 0 0% 100%; --card-foreground: 0 0% 20%;
+/* -------------------------------------------
+   Dark mode — full replacement for dark variables
+   ------------------------------------------- */
+.dark {
+  /* Background & text for dark mode */
+  --background: 236 63% 4%;
+  --foreground: 220 14% 92%;
 
---radius: 0.5rem; 
+  --primary: 268 71% 44%;
+  --primary-foreground: 0 0% 100%;
 
-/* ------------------------------------------- Base layer (applies theme-aware classes via Tailwind tokens) ------------------------------------------- */ @layer base { body { @apply bg-background text-foreground antialiased; font-family: var(--font-body); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; line-height: 1.4; }
+  --secondary: 255 18% 18%;
+  --secondary-foreground: 0 0% 100%;
 
-h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); @apply font-bold tracking-tight text-foreground; }
+  --muted: 228 10% 12%;
+  --muted-foreground: 220 10% 70%;
 
-a { color: hsl(var(--primary) / 1); text-decoration: none; } }
+  --accent: 255 92% 76%;
+  --accent-foreground: 255 92% 10%;
 
-/* ------------------------------------------- Utility layer: small helper classes ------------------------------------------- */ @layer utilities { .glass-panel { @apply bg-white/70 backdrop-blur-md border border-white/50 shadow-xl; }
+  --accent-warm: 35 80% 63%;
 
-.card-hover { @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-primary/20; } }
+  --destructive: 0 70% 55%;
+  --destructive-foreground: 0 0% 98%;
 
-/* ------------------------------------------- Dark mode — full replacement for dark variables ------------------------------------------- / .dark { / Background & text for dark mode */ --background: 236 63% 4%; --foreground: 220 14% 92%;
+  --border: 230 8% 12%;
+  --input: 230 6% 14%;
+  --ring: 268 71% 44%;
 
---primary: 268 71% 44%; --primary-foreground: 0 0% 100%;
+  --card: 233 14% 6%;
+  --card-foreground: 220 14% 92%;
 
---secondary: 255 18% 18%; --secondary-foreground: 0 0% 100%;
+  --radius: 0.5rem;
+}
 
---muted: 228 10% 12%; --muted-foreground: 220 10% 70%;
+/* -------------------------------------------
+   Dark-mode helpers and specific selectors
+   ------------------------------------------- */
+.dark .glass-panel {
+  @apply bg-black/30 backdrop-blur-md border border-white/10 shadow-xl shadow-black/20;
+}
 
---accent: 255 92% 76%; --accent-foreground: 255 92% 10%;
+/* Print styles */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
 
---accent-warm: 35 80% 63%;
+  nav,
+  footer,
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea,
+  .no-print,
+  .print\:hidden {
+    display: none !important;
+  }
 
---destructive: 0 70% 55%; --destructive-foreground: 0 0% 98%;
+  .card, [class*="card"] {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    box-shadow: none !important;
+  }
 
---border: 230 8% 12%; --input: 230 6% 14%; --ring: 268 71% 44%;
+  table, [class*="chart"], [class*="Chart"] {
+    visibility: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
 
---card: 233 14% 6%; --card-foreground: 220 14% 92%;
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
 
---radius: 0.5rem; }
+  body, html {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
 
-/* ------------------------------------------- Dark-mode helpers and specific selectors ------------------------------------------- */ .dark .glass-panel { @apply bg-black/30 backdrop-blur-md border border-white/10 shadow-xl shadow-black/20; }
-
-/* Print styles */ @media print { body { background: white !important; color: black !important; }
-
-nav, footer, button, [role="button"], input, select, textarea, .no-print, .print:hidden { display: none !important; } }
+  @page {
+    margin: 1.5cm;
+  }
+}
 
 /* Card layout helpers */
-.card, [class*="card"] { break-inside: avoid; page-break-inside: avoid; }
+.card, [class*="card"] {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
 
-/* Metric tile / KPI minimal styles */ .kpi-title { font-size: 1.25rem; font-weight: 700; color: hsl(var(--foreground)); } .kpi-value { font-size: 1.5rem; font-weight: 800; color: hsl(var(--primary)); }
+/* Metric tile / KPI minimal styles */
+.kpi-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+}
+.kpi-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: hsl(var(--primary));
+}
 
-/* Small responsive helpers */ @media (max-width: 900px) { .sidebar { display: none; } .app-container { padding: 0 12px; } }
+/* Small responsive helpers */
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .app-container { padding: 0 12px; }
+}
