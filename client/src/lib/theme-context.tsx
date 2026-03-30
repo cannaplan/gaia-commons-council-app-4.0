@@ -57,6 +57,10 @@ const schemeStyles: Record<ColorScheme, string> = {
   `
 };
 
+function isValidColorScheme(value: unknown): value is ColorScheme {
+  return colorSchemes.some((s) => s.id === value);
+}
+
 /**
  * Provides theme context to descendants and applies the currently selected color scheme to the document.
  *
@@ -69,7 +73,8 @@ const schemeStyles: Record<ColorScheme, string> = {
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [colorScheme, setColorScheme] = useState<ColorScheme>(() => {
     if (typeof window !== "undefined") {
-      return (localStorage.getItem("colorScheme") as ColorScheme) || "default";
+      const stored = localStorage.getItem("colorScheme");
+      return isValidColorScheme(stored) ? stored : "default";
     }
     return "default";
   });
