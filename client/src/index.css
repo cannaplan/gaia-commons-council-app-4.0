@@ -20,7 +20,7 @@
 
 --card: 0 0% 100%; --card-foreground: 0 0% 20%;
 
---radius: 0.5rem; }
+--radius: 0.5rem; 
 
 /* ------------------------------------------- Base layer (applies theme-aware classes via Tailwind tokens) ------------------------------------------- */ @layer base { body { @apply bg-background text-foreground antialiased; font-family: var(--font-body); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; line-height: 1.4; }
 
