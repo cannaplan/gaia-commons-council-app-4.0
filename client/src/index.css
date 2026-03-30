@@ -58,7 +58,8 @@ a { color: hsl(var(--primary) / 1); text-decoration: none; } }
 
 nav, footer, button, [role="button"], input, select, textarea, .no-print, .print:hidden { display: none !important; } }
 
-/* Card layout helpers / .card, [class="card"] { break-inside: avoid; page-break-inside: avoid; }
+/* Card layout helpers */
+.card, [class*="card"] { break-inside: avoid; page-break-inside: avoid; }
 
 /* Metric tile / KPI minimal styles */ .kpi-title { font-size: 1.25rem; font-weight: 700; color: hsl(var(--foreground)); } .kpi-value { font-size: 1.5rem; font-weight: 800; color: hsl(var(--primary)); }
 
