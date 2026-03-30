@@ -1,6 +1,6 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
-export type ColorScheme = 'default' | 'forest' | 'ocean' | 'sunset' | 'earth' | 'lavender';
+export type ColorScheme = "default" | "forest" | "ocean" | "sunset" | "earth" | "lavender";
 
 interface ThemeContextType {
   colorScheme: ColorScheme;
@@ -9,13 +9,13 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const colorSchemes: { id: ColorScheme; name: string; description: string; primary: string; accent: string }[] = [
-  { id: 'default', name: 'Emerald', description: 'Fresh green theme', primary: '#10b981', accent: '#34d399' },
-  { id: 'forest', name: 'Forest', description: 'Deep woodland greens', primary: '#166534', accent: '#22c55e' },
-  { id: 'ocean', name: 'Ocean', description: 'Calming blue tones', primary: '#0369a1', accent: '#38bdf8' },
-  { id: 'sunset', name: 'Sunset', description: 'Warm amber hues', primary: '#d97706', accent: '#fbbf24' },
-  { id: 'earth', name: 'Earth', description: 'Natural brown tones', primary: '#92400e', accent: '#d97706' },
-  { id: 'lavender', name: 'Lavender', description: 'Soft purple palette', primary: '#7c3aed', accent: '#a78bfa' }
+export const colorSchemes: { id: ColorScheme; name: string; description: string; primary?: string; accent?: string }[] = [
+  { id: "default", name: "Emerald", description: "Fresh green theme", primary: "#10b981", accent: "#34d399" },
+  { id: "forest", name: "Forest", description: "Deep woodland greens", primary: "#166534", accent: "#22c55e" },
+  { id: "ocean", name: "Ocean", description: "Calming blue tones", primary: "#0369a1", accent: "#38bdf8" },
+  { id: "sunset", name: "Sunset", description: "Warm amber hues", primary: "#d97706", accent: "#fbbf24" },
+  { id: "earth", name: "Earth", description: "Natural brown tones", primary: "#92400e", accent: "#d97706" },
+  { id: "lavender", name: "Lavender", description: "Soft purple palette", primary: "#6B21BF", accent: "#A78BFA" }
 ];
 
 const schemeStyles: Record<ColorScheme, string> = {
@@ -50,42 +50,52 @@ const schemeStyles: Record<ColorScheme, string> = {
     --accent-foreground: 28 80% 10%;
   `,
   lavender: `
-    --primary: 263 70% 58%;
+    --primary: 268 71% 44%;
     --primary-foreground: 0 0% 100%;
-    --accent: 263 70% 72%;
-    --accent-foreground: 263 70% 10%;
+    --accent: 255 92% 76%;
+    --accent-foreground: 255 92% 10%;
   `
 };
 
+function isValidColorScheme(value: unknown): value is ColorScheme {
+  return colorSchemes.some((s) => s.id === value);
+}
+
+/**
+ * Provides theme context to descendants and applies the currently selected color scheme to the document.
+ *
+ * This component manages the active `colorScheme`, updates a `<style id="theme-colors">` element with
+ * the scheme's CSS variables, and persists the selection to localStorage when possible.
+ *
+ * @param children - React nodes rendered inside the provider
+ * @returns A React provider element that supplies `{ colorScheme, setColorScheme }` to its subtree
+ */
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [colorScheme, setColorScheme] = useState<ColorScheme>(() => {
-    if (typeof window !== 'undefined') {
-      return (localStorage.getItem('colorScheme') as ColorScheme) || 'default';
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("colorScheme");
+      return isValidColorScheme(stored) ? stored : "default";
     }
-    return 'default';
+    return "default";
   });
 
   useEffect(() => {
-    const root = document.documentElement;
-    const styleId = 'theme-colors';
-    
-    let styleEl = document.getElementById(styleId) as HTMLStyleElement;
+    const styleId = "theme-colors";
+    let styleEl = document.getElementById(styleId) as HTMLStyleElement | null;
+
     if (!styleEl) {
-      styleEl = document.createElement('style');
+      styleEl = document.createElement("style");
       styleEl.id = styleId;
       document.head.appendChild(styleEl);
     }
-    
-    styleEl.textContent = `
-      :root {
-        ${schemeStyles[colorScheme]}
-      }
-      .dark {
-        ${schemeStyles[colorScheme]}
-      }
-    `;
-    
-    localStorage.setItem('colorScheme', colorScheme);
+
+    const vars = schemeStyles[colorScheme] || schemeStyles.default;
+    styleEl.innerHTML = `:root { ${vars} }`;
+    try {
+      localStorage.setItem("colorScheme", colorScheme);
+    } catch {
+      /* ignore */
+    }
   }, [colorScheme]);
 
   return (
@@ -95,10 +105,16 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useColorScheme() {
-  const context = useContext(ThemeContext);
-  if (context === undefined) {
-    throw new Error('useColorScheme must be used within a ThemeProvider');
+/**
+ * Accesses the current theme context value.
+ *
+ * @returns The theme context containing `colorScheme` and `setColorScheme`.
+ * @throws Error if called outside of a `ThemeProvider`.
+ */
+export function useTheme() {
+  const ctx = useContext(ThemeContext);
+  if (!ctx) {
+    throw new Error("useTheme must be used within ThemeProvider");
   }
-  return context;
+  return ctx;
 }
