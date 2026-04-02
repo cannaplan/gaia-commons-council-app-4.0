@@ -11,6 +11,17 @@ export default defineConfig({
     environmentMatchGlobs: [["server/**", "node"]],
     include: ["**/*.test.ts", "**/*.test.tsx"],
     exclude: ["node_modules/**", "dist/**"],
+    coverage: {
+      provider: "v8",
+      include: ["client/src/**", "server/**", "shared/**"],
+      exclude: ["**/*.test.ts", "**/*.test.tsx", "**/test-setup.ts"],
+      thresholds: {
+        lines: 30,
+        functions: 20,
+        branches: 20,
+        statements: 30,
+      },
+    },
   },
   resolve: {
     alias: {
