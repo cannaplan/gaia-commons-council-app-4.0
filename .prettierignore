@@ -1,0 +1,10 @@
+node_modules
+dist
+build
+.cache
+server/public
+package-lock.json
+*.png
+*.jpg
+*.svg
+*.ico

@@ -1,18 +1,18 @@
-import { useTranslation } from 'react-i18next';
-import { Globe } from 'lucide-react';
+import { useTranslation } from "react-i18next";
+import { Globe } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { languages } from '@/lib/i18n';
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { languages } from "@/lib/i18n";
 
 export function LanguageSelector() {
   const { i18n } = useTranslation();
 
-  const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
+  const currentLanguage = languages.find((lang) => lang.code === i18n.language) || languages[0];
 
   return (
     <DropdownMenu>
@@ -27,7 +27,7 @@ export function LanguageSelector() {
           <DropdownMenuItem
             key={lang.code}
             onClick={() => i18n.changeLanguage(lang.code)}
-            className={i18n.language === lang.code ? 'bg-accent' : ''}
+            className={i18n.language === lang.code ? "bg-accent" : ""}
             data-testid={`menu-item-language-${lang.code}`}
           >
             <span className="font-medium">{lang.nativeName}</span>

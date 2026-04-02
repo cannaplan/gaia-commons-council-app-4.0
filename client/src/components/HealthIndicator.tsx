@@ -1,10 +1,6 @@
 import { Activity, Server } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 // If you still have useHealth and want the dynamic indicator, keep this:
 import { useHealth } from "@/hooks/use-gaia";
@@ -12,13 +8,9 @@ import { useHealth } from "@/hooks/use-gaia";
 export function HealthIndicator() {
   const { data: health, isLoading, isError } = useHealth();
 
-  const statusColor = isError
-    ? "bg-destructive"
-    : "bg-emerald-500";
+  const statusColor = isError ? "bg-destructive" : "bg-emerald-500";
 
-  const statusText = isError
-    ? "Error"
-    : health?.status || (isLoading ? "Connecting..." : "Online");
+  const statusText = isError ? "Error" : health?.status || (isLoading ? "Connecting..." : "Online");
 
   return (
     <Tooltip>

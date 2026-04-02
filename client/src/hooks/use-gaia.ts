@@ -497,8 +497,8 @@ export function useMiningAlternatives() {
 // DAO Stats
 export function useDAOStats() {
   return useQuery({
-    queryKey: ['dao-stats'],
-    queryFn: () => fetch('/api/dao/stats').then((r) => r.json()),
+    queryKey: ["dao-stats"],
+    queryFn: () => fetch("/api/dao/stats").then((r) => r.json()),
   });
 }
 
@@ -507,17 +507,17 @@ export function useSubmitSignature({ onSuccess }: { onSuccess?: () => void } = {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ name, email }: { name: string; email: string }) => {
-      const r = await fetch('/api/dao/signature', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const r = await fetch("/api/dao/signature", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email }),
       });
       const data = await r.json();
-      if (!r.ok) throw new Error(data?.message ?? 'Submission failed');
+      if (!r.ok) throw new Error(data?.message ?? "Submission failed");
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['dao-stats'] });
+      queryClient.invalidateQueries({ queryKey: ["dao-stats"] });
       onSuccess?.();
     },
   });

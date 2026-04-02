@@ -1,9 +1,19 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Menu, X, Home, Banknote, TreePine, Map, Users, 
-  GraduationCap, Building2, Scale, Globe, Calculator,
-  ChevronUp
+import {
+  Menu,
+  X,
+  Home,
+  Banknote,
+  TreePine,
+  Map,
+  Users,
+  GraduationCap,
+  Building2,
+  Scale,
+  Globe,
+  Calculator,
+  ChevronUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -18,7 +28,11 @@ const navItems: NavItem[] = [
   { id: "card-pilot-clusters", label: "Pilot Clusters", icon: <TreePine className="h-4 w-4" /> },
   { id: "card-multi-scale", label: "Scale Deployment", icon: <Scale className="h-4 w-4" /> },
   { id: "card-funding", label: "Funding Sources", icon: <Banknote className="h-4 w-4" /> },
-  { id: "card-mining-alternative", label: "Mining Alternative", icon: <Building2 className="h-4 w-4" /> },
+  {
+    id: "card-mining-alternative",
+    label: "Mining Alternative",
+    icon: <Building2 className="h-4 w-4" />,
+  },
   { id: "card-coalition", label: "Coalition Partners", icon: <Users className="h-4 w-4" /> },
   { id: "card-curriculum", label: "K-12 Curriculum", icon: <GraduationCap className="h-4 w-4" /> },
   { id: "interactive-map", label: "MN Districts Map", icon: <Map className="h-4 w-4" /> },
@@ -33,11 +47,15 @@ export function QuickNav() {
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 500);
-      
-      const sections = navItems.map(item => ({
-        id: item.id,
-        element: document.querySelector(`[data-testid="${item.id}"]`) || document.getElementById(item.id)
-      })).filter(s => s.element);
+
+      const sections = navItems
+        .map((item) => ({
+          id: item.id,
+          element:
+            document.querySelector(`[data-testid="${item.id}"]`) ||
+            document.getElementById(item.id),
+        }))
+        .filter((s) => s.element);
 
       const scrollPosition = window.scrollY + 150;
 

@@ -15,7 +15,7 @@ import LeechLake from "@/pages/LeechLake";
 import About from "@/pages/About";
 import NotFound from "@/pages/not-found";
 import { Analytics } from "@vercel/analytics/react";
-import './lib/i18n';
+import "./lib/i18n";
 
 function Router() {
   return (
@@ -39,7 +39,10 @@ function App() {
           <KeyboardNavProvider>
             <TooltipProvider>
               <ErrorBoundary>
-                <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-primary focus:text-primary-foreground">
+                <a
+                  href="#main-content"
+                  className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-primary focus:text-primary-foreground"
+                >
                   Skip to main content
                 </a>
                 <Toaster />

@@ -1,16 +1,22 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Download, FileSpreadsheet, FileText, Printer, Share2 } from 'lucide-react';
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Download, FileSpreadsheet, FileText, Printer, Share2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { exportToPDF, exportToExcel, exportToCSV, printElement, ExportData } from '@/lib/export-utils';
-import { useToast } from '@/hooks/use-toast';
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import {
+  exportToPDF,
+  exportToExcel,
+  exportToCSV,
+  printElement,
+  ExportData,
+} from "@/lib/export-utils";
+import { useToast } from "@/hooks/use-toast";
 
 interface ExportPanelProps {
   elementId?: string;
@@ -20,12 +26,12 @@ interface ExportPanelProps {
   showShare?: boolean;
 }
 
-export function ExportPanel({ 
-  elementId = 'main-content',
+export function ExportPanel({
+  elementId = "main-content",
   data = [],
-  filename = 'gaia-commons-export',
+  filename = "gaia-commons-export",
   showPrint = true,
-  showShare = true
+  showShare = true,
 }: ExportPanelProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
@@ -36,14 +42,14 @@ export function ExportPanel({
     try {
       await exportToPDF(elementId, filename);
       toast({
-        title: 'Export Complete',
-        description: 'PDF has been downloaded successfully.',
+        title: "Export Complete",
+        description: "PDF has been downloaded successfully.",
       });
     } catch (error) {
       toast({
-        title: 'Export Failed',
-        description: 'Could not export to PDF. Please try again.',
-        variant: 'destructive',
+        title: "Export Failed",
+        description: "Could not export to PDF. Please try again.",
+        variant: "destructive",
       });
     } finally {
       setIsExporting(false);
@@ -53,23 +59,23 @@ export function ExportPanel({
   const handleExcelExport = async () => {
     if (data.length === 0) {
       toast({
-        title: 'No Data',
-        description: 'No data available to export.',
-        variant: 'destructive',
+        title: "No Data",
+        description: "No data available to export.",
+        variant: "destructive",
       });
       return;
     }
     try {
       await exportToExcel(data, filename);
       toast({
-        title: 'Export Complete',
-        description: 'Excel file has been downloaded successfully.',
+        title: "Export Complete",
+        description: "Excel file has been downloaded successfully.",
       });
     } catch (error) {
       toast({
-        title: 'Export Failed',
-        description: 'Could not export to Excel. Please try again.',
-        variant: 'destructive',
+        title: "Export Failed",
+        description: "Could not export to Excel. Please try again.",
+        variant: "destructive",
       });
     }
   };
@@ -77,16 +83,16 @@ export function ExportPanel({
   const handleCSVExport = () => {
     if (data.length === 0 || !data[0]?.data) {
       toast({
-        title: 'No Data',
-        description: 'No data available to export.',
-        variant: 'destructive',
+        title: "No Data",
+        description: "No data available to export.",
+        variant: "destructive",
       });
       return;
     }
     exportToCSV(data[0].data, filename);
     toast({
-      title: 'Export Complete',
-      description: 'CSV file has been downloaded successfully.',
+      title: "Export Complete",
+      description: "CSV file has been downloaded successfully.",
     });
   };
 
@@ -96,8 +102,8 @@ export function ExportPanel({
 
   const handleShare = async () => {
     const shareData = {
-      title: 'Gaia Commons Council Dashboard',
-      text: 'Check out the Gaia Commons Council - One Vote, Forever Fed initiative',
+      title: "Gaia Commons Council Dashboard",
+      text: "Check out the Gaia Commons Council - One Vote, Forever Fed initiative",
       url: window.location.href,
     };
 
@@ -105,7 +111,7 @@ export function ExportPanel({
       try {
         await navigator.share(shareData);
       } catch (error) {
-        if ((error as Error).name !== 'AbortError') {
+        if ((error as Error).name !== "AbortError") {
           copyToClipboard();
         }
       }
@@ -117,17 +123,22 @@ export function ExportPanel({
   const copyToClipboard = () => {
     navigator.clipboard.writeText(window.location.href);
     toast({
-      title: 'Link Copied',
-      description: 'Dashboard link copied to clipboard.',
+      title: "Link Copied",
+      description: "Dashboard link copied to clipboard.",
     });
   };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" disabled={isExporting} data-testid="button-export-panel">
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={isExporting}
+          data-testid="button-export-panel"
+        >
           <Download className="h-4 w-4 mr-2" />
-          {t('common.export')}
+          {t("common.export")}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
@@ -152,7 +163,7 @@ export function ExportPanel({
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handlePrint} data-testid="menu-item-print">
               <Printer className="h-4 w-4 mr-2" />
-              {t('common.print')}
+              {t("common.print")}
             </DropdownMenuItem>
           </>
         )}
@@ -161,7 +172,7 @@ export function ExportPanel({
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleShare} data-testid="menu-item-share">
               <Share2 className="h-4 w-4 mr-2" />
-              {t('common.share')}
+              {t("common.share")}
             </DropdownMenuItem>
           </>
         )}

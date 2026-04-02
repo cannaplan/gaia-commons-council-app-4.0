@@ -34,7 +34,12 @@ export default function CollapsibleCard({
     <section className={`card ${className}`} aria-labelledby={`${id}-label`}>
       <header
         className="card-header"
-        style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: 12 }}
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: 12,
+        }}
       >
         <h3 id={`${id}-label`} style={{ margin: 0 }}>
           {title}
@@ -54,7 +59,10 @@ export default function CollapsibleCard({
             width="18"
             height="18"
             viewBox="0 0 24 24"
-            style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 160ms ease" }}
+            style={{
+              transform: open ? "rotate(180deg)" : "rotate(0deg)",
+              transition: "transform 160ms ease",
+            }}
           >
             <path fill="currentColor" d="M12 15.6L5.7 9.3l1.4-1.4L12 12.8l4.9-4.9 1.4 1.4z" />
           </svg>
@@ -67,7 +75,11 @@ export default function CollapsibleCard({
         role="region"
         aria-labelledby={`${id}-label`}
         aria-hidden={!open}
-        style={{ padding: open ? 12 : 0, overflow: "hidden", transition: "max-height 220ms ease, opacity 180ms ease" }}
+        style={{
+          padding: open ? 12 : 0,
+          overflow: "hidden",
+          transition: "max-height 220ms ease, opacity 180ms ease",
+        }}
       >
         {open || keepMounted ? children : null}
       </div>

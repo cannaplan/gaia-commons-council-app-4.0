@@ -18,11 +18,21 @@ export function useKeyboardShortcuts() {
           title: "Keyboard Shortcuts",
           description: (
             <div className="mt-2 space-y-1 text-sm">
-              <div><kbd className="px-1 bg-muted rounded">↑/↓</kbd> Scroll up/down</div>
-              <div><kbd className="px-1 bg-muted rounded">Home</kbd> Go to top</div>
-              <div><kbd className="px-1 bg-muted rounded">End</kbd> Go to bottom</div>
-              <div><kbd className="px-1 bg-muted rounded">1-9</kbd> Jump to section</div>
-              <div><kbd className="px-1 bg-muted rounded">?</kbd> Show shortcuts</div>
+              <div>
+                <kbd className="px-1 bg-muted rounded">↑/↓</kbd> Scroll up/down
+              </div>
+              <div>
+                <kbd className="px-1 bg-muted rounded">Home</kbd> Go to top
+              </div>
+              <div>
+                <kbd className="px-1 bg-muted rounded">End</kbd> Go to bottom
+              </div>
+              <div>
+                <kbd className="px-1 bg-muted rounded">1-9</kbd> Jump to section
+              </div>
+              <div>
+                <kbd className="px-1 bg-muted rounded">?</kbd> Show shortcuts
+              </div>
             </div>
           ) as any,
         });
@@ -57,7 +67,9 @@ export function useKeyboardShortcuts() {
       if (num >= 1 && num <= 9 && num <= sectionIds.length) {
         e.preventDefault();
         const sectionId = sectionIds[num - 1];
-        const element = document.querySelector(`[data-testid="${sectionId}"]`) || document.getElementById(sectionId);
+        const element =
+          document.querySelector(`[data-testid="${sectionId}"]`) ||
+          document.getElementById(sectionId);
         if (element) {
           const top = element.getBoundingClientRect().top + window.scrollY - 100;
           window.scrollTo({ top, behavior: "smooth" });

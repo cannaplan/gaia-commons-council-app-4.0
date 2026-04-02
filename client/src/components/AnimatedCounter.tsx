@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, useSpring, useTransform } from 'framer-motion';
+import React, { useState, useEffect, useRef } from "react";
+import { motion, useSpring, useTransform } from "framer-motion";
 
 interface AnimatedCounterProps {
   value: number;
@@ -13,10 +13,10 @@ interface AnimatedCounterProps {
 export function AnimatedCounter({
   value,
   duration = 2,
-  prefix = '',
-  suffix = '',
+  prefix = "",
+  suffix = "",
   decimals = 0,
-  className = '',
+  className = "",
 }: AnimatedCounterProps) {
   const [isInView, setIsInView] = useState(false);
   const ref = useRef<HTMLSpanElement | null>(null);
@@ -44,13 +44,15 @@ export function AnimatedCounter({
     damping: 20,
   });
 
-  const display = useTransform(spring, (current) =>
-    prefix +
-    current.toLocaleString(undefined, {
-      minimumFractionDigits: decimals,
-      maximumFractionDigits: decimals,
-    }) +
-    suffix,
+  const display = useTransform(
+    spring,
+    (current) =>
+      prefix +
+      current.toLocaleString(undefined, {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals,
+      }) +
+      suffix,
   );
 
   useEffect(() => {
@@ -78,10 +80,10 @@ interface AnimatedProgressProps {
 export function AnimatedProgress({
   value,
   max = 100,
-  className = '',
-  barClassName = '',
+  className = "",
+  barClassName = "",
   showLabel = true,
-  label = '',
+  label = "",
 }: AnimatedProgressProps) {
   const percentage = Math.min((value / max) * 100, 100);
 
@@ -98,7 +100,7 @@ export function AnimatedProgress({
           className={barClassName}
           initial={{ width: 0 }}
           animate={{ width: `${percentage}%` }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         />
       </div>
     </div>
@@ -107,46 +109,35 @@ export function AnimatedProgress({
 
 interface AnimatedBadgeProps {
   children: React.ReactNode;
-  variant?: 'default' | 'success' | 'warning' | 'destructive';
+  variant?: "default" | "success" | "warning" | "destructive";
   pulse?: boolean;
   className?: string;
 }
 
 export function AnimatedBadge({
   children,
-  variant = 'default',
+  variant = "default",
   pulse = false,
-  className = '',
+  className = "",
 }: AnimatedBadgeProps) {
-  const variants: Record<
-    NonNullable<AnimatedBadgeProps['variant']>,
-    string
-  > = {
-    default: 'bg-primary/10 text-primary border-primary/20',
-    success: 'bg-green-500/10 text-green-600 border-green-500/20',
-    warning: 'bg-amber-500/10 text-amber-600 border-amber-500/20',
-    destructive: 'bg-red-500/10 text-red-600 border-red-500/20',
+  const variants: Record<NonNullable<AnimatedBadgeProps["variant"]>, string> = {
+    default: "bg-primary/10 text-primary border-primary/20",
+    success: "bg-green-500/10 text-green-600 border-green-500/20",
+    warning: "bg-amber-500/10 text-amber-600 border-amber-500/20",
+    destructive: "bg-red-500/10 text-red-600 border-red-500/20",
   };
 
   return (
     <motion.span
       className={[
-        'inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium',
+        "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium",
         variants[variant],
         className,
       ]
         .filter(Boolean)
-        .join(' ')}
-      animate={
-        pulse
-          ? { scale: [1, 1.05, 1] }
-          : undefined
-      }
-      transition={
-        pulse
-          ? { duration: 1.2, repeat: Infinity, ease: 'easeInOut' }
-          : undefined
-      }
+        .join(" ")}
+      animate={pulse ? { scale: [1, 1.05, 1] } : undefined}
+      transition={pulse ? { duration: 1.2, repeat: Infinity, ease: "easeInOut" } : undefined}
     >
       {children}
     </motion.span>

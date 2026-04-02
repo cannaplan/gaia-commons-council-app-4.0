@@ -1,8 +1,8 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
 
-vi.mock('framer-motion', async () => {
-  const { default: React } = await import('react');
+vi.mock("framer-motion", async () => {
+  const { default: React } = await import("react");
   return {
     motion: new Proxy(
       {},
@@ -11,23 +11,27 @@ vi.mock('framer-motion', async () => {
           (_target, tag: string) =>
           ({ children, initial: _i, animate: _a, transition: _t, exit: _e, ...props }: any) =>
             React.createElement(tag, props, children),
-      }
+      },
     ),
   };
 });
 
-vi.mock('wouter', async () => {
-  const { default: React } = await import('react');
+vi.mock("wouter", async () => {
+  const { default: React } = await import("react");
   return {
-    Link: ({ href, children, ...props }: { href: string; children?: React.ReactNode } & React.HTMLAttributes<HTMLAnchorElement>) =>
-      React.createElement('a', { href, ...props }, children),
+    Link: ({
+      href,
+      children,
+      ...props
+    }: { href: string; children?: React.ReactNode } & React.HTMLAttributes<HTMLAnchorElement>) =>
+      React.createElement("a", { href, ...props }, children),
   };
 });
 
-import LeechLake from '../pages/LeechLake';
+import LeechLake from "../pages/LeechLake";
 
-describe('LeechLake page', () => {
-  it('renders the page title', () => {
+describe("LeechLake page", () => {
+  it("renders the page title", () => {
     render(<LeechLake />);
     expect(screen.getByText(/Leech Lake Greenhouse Pilot/i)).toBeInTheDocument();
   });

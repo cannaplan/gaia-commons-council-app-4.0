@@ -9,7 +9,9 @@ export default defineConfig(async () => {
   const plugins = [react()];
 
   // Try to load optional Replit plugins & runtime overlay only if available.
-  const runtimeOverlayModule = await import("@replit/vite-plugin-runtime-error-modal").catch(() => null);
+  const runtimeOverlayModule = await import("@replit/vite-plugin-runtime-error-modal").catch(
+    () => null,
+  );
   if (runtimeOverlayModule) {
     const runtimeOverlay = runtimeOverlayModule.default || runtimeOverlayModule;
     if (typeof runtimeOverlay === "function") plugins.push(runtimeOverlay());
@@ -19,7 +21,8 @@ export default defineConfig(async () => {
     try {
       const cartographerModule = await import("@replit/vite-plugin-cartographer").catch(() => null);
       const devBannerModule = await import("@replit/vite-plugin-dev-banner").catch(() => null);
-      if (cartographerModule && cartographerModule.cartographer) plugins.push(cartographerModule.cartographer());
+      if (cartographerModule && cartographerModule.cartographer)
+        plugins.push(cartographerModule.cartographer());
       if (devBannerModule && devBannerModule.devBanner) plugins.push(devBannerModule.devBanner());
     } catch {}
   }

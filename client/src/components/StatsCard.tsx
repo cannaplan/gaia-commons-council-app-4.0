@@ -30,9 +30,7 @@ export function StatsCard({ title, icon, children, className, delay = 0 }: Stats
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            {children}
-          </div>
+          <div className="space-y-4">{children}</div>
         </CardContent>
       </Card>
     </motion.div>
@@ -54,10 +52,12 @@ export function StatItem({ label, value, trend, trendUp }: StatItemProps) {
         <p className="text-2xl font-bold font-display text-foreground tracking-tight">{value}</p>
       </div>
       {trend && (
-        <span className={cn(
-          "text-xs px-2 py-1 rounded-full font-medium mb-1",
-          trendUp ? "bg-green-100 text-green-700" : "bg-orange-100 text-orange-700"
-        )}>
+        <span
+          className={cn(
+            "text-xs px-2 py-1 rounded-full font-medium mb-1",
+            trendUp ? "bg-green-100 text-green-700" : "bg-orange-100 text-orange-700",
+          )}
+        >
           {trend}
         </span>
       )}

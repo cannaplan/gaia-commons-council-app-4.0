@@ -1,12 +1,6 @@
-"use client"
+"use client";
 
-import {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-  type ReactNode,
-} from "react";
+import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
 import { ChevronsDownUp, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -27,27 +21,19 @@ export function useCollapsibleContext() {
 }
 
 export function CollapsibleProvider({ children }: { children: ReactNode }) {
-  const [globalState, setGlobalState] = useState<boolean | undefined>(
-    undefined,
-  );
+  const [globalState, setGlobalState] = useState<boolean | undefined>(undefined);
 
   const collapseAll = useCallback(() => setGlobalState(false), []);
   const expandAll = useCallback(() => setGlobalState(true), []);
 
   return (
-    <CollapsibleContext.Provider
-      value={{ globalState, collapseAll, expandAll }}
-    >
+    <CollapsibleContext.Provider value={{ globalState, collapseAll, expandAll }}>
       {children}
     </CollapsibleContext.Provider>
   );
 }
 
-export default function CollapseAllToggle({
-  className,
-}: {
-  className?: string;
-}) {
+export default function CollapseAllToggle({ className }: { className?: string }) {
   const { globalState, collapseAll, expandAll } = useCollapsibleContext();
   const isCollapsed = globalState === false;
 

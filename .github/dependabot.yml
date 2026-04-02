@@ -14,14 +14,14 @@ updates:
       # Group minor/patch updates for Radix UI to reduce PR noise
       radix-ui:
         patterns:
-          - '@radix-ui/*'
+          - "@radix-ui/*"
         update-types:
           - minor
           - patch
       # Group testing library updates
       testing:
         patterns:
-          - '@testing-library/*'
+          - "@testing-library/*"
           - vitest
           - jsdom
           - supertest

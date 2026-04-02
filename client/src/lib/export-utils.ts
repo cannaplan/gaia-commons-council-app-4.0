@@ -8,10 +8,7 @@ export interface ExportData {
   columns?: { key: string; label: string }[];
 }
 
-export async function exportToPDF(
-  elementId: string,
-  filename: string,
-): Promise<void> {
+export async function exportToPDF(elementId: string, filename: string): Promise<void> {
   const element = document.getElementById(elementId);
   if (!element) {
     console.error("Element not found:", elementId);
@@ -51,17 +48,12 @@ export async function exportToPDF(
   }
 }
 
-export async function exportToExcel(
-  data: ExportData[],
-  filename: string,
-): Promise<void> {
+export async function exportToExcel(data: ExportData[], filename: string): Promise<void> {
   try {
     const workbook = new ExcelJS.Workbook();
 
     data.forEach((sheet) => {
-      const worksheet = workbook.addWorksheet(
-        sheet.title.substring(0, 31),
-      );
+      const worksheet = workbook.addWorksheet(sheet.title.substring(0, 31));
 
       if (!sheet.data || sheet.data.length === 0) return;
 
@@ -107,10 +99,7 @@ export async function exportToExcel(
   }
 }
 
-export function exportToCSV(
-  data: Record<string, any>[],
-  filename: string,
-): void {
+export function exportToCSV(data: Record<string, any>[], filename: string): void {
   try {
     if (!data || data.length === 0) {
       console.error("No data to export");
@@ -121,18 +110,13 @@ export function exportToCSV(
     const csvRows: string[] = [];
 
     // Header row
-    csvRows.push(
-      headers
-        .map((h) => `"${String(h).replace(/"/g, '""')}"`)
-        .join(","),
-    );
+    csvRows.push(headers.map((h) => `"${String(h).replace(/"/g, '""')}"`).join(","));
 
     // Data rows
     data.forEach((row) => {
       const values = headers.map((header) => {
         const value = row[header];
-        const stringValue =
-          value === null || value === undefined ? "" : String(value);
+        const stringValue = value === null || value === undefined ? "" : String(value);
         return `"${stringValue.replace(/"/g, '""')}"`;
       });
       csvRows.push(values.join(","));

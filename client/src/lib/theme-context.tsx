@@ -9,13 +9,55 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const colorSchemes: { id: ColorScheme; name: string; description: string; primary?: string; accent?: string }[] = [
-  { id: "default", name: "Emerald", description: "Fresh green theme", primary: "#10b981", accent: "#34d399" },
-  { id: "forest", name: "Forest", description: "Deep woodland greens", primary: "#166534", accent: "#22c55e" },
-  { id: "ocean", name: "Ocean", description: "Calming blue tones", primary: "#0369a1", accent: "#38bdf8" },
-  { id: "sunset", name: "Sunset", description: "Warm amber hues", primary: "#d97706", accent: "#fbbf24" },
-  { id: "earth", name: "Earth", description: "Natural brown tones", primary: "#92400e", accent: "#d97706" },
-  { id: "lavender", name: "Lavender", description: "Soft purple palette", primary: "#6B21BF", accent: "#A78BFA" }
+export const colorSchemes: {
+  id: ColorScheme;
+  name: string;
+  description: string;
+  primary?: string;
+  accent?: string;
+}[] = [
+  {
+    id: "default",
+    name: "Emerald",
+    description: "Fresh green theme",
+    primary: "#10b981",
+    accent: "#34d399",
+  },
+  {
+    id: "forest",
+    name: "Forest",
+    description: "Deep woodland greens",
+    primary: "#166534",
+    accent: "#22c55e",
+  },
+  {
+    id: "ocean",
+    name: "Ocean",
+    description: "Calming blue tones",
+    primary: "#0369a1",
+    accent: "#38bdf8",
+  },
+  {
+    id: "sunset",
+    name: "Sunset",
+    description: "Warm amber hues",
+    primary: "#d97706",
+    accent: "#fbbf24",
+  },
+  {
+    id: "earth",
+    name: "Earth",
+    description: "Natural brown tones",
+    primary: "#92400e",
+    accent: "#d97706",
+  },
+  {
+    id: "lavender",
+    name: "Lavender",
+    description: "Soft purple palette",
+    primary: "#6B21BF",
+    accent: "#A78BFA",
+  },
 ];
 
 const schemeStyles: Record<ColorScheme, string> = {
@@ -54,7 +96,7 @@ const schemeStyles: Record<ColorScheme, string> = {
     --primary-foreground: 0 0% 100%;
     --accent: 255 92% 76%;
     --accent-foreground: 255 92% 10%;
-  `
+  `,
 };
 
 function isValidColorScheme(value: unknown): value is ColorScheme {

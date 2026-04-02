@@ -59,11 +59,14 @@ export default function About() {
             Planetary transformation framework that actually works
           </p>
           <p className="text-[#94a3b8] mb-8">
-            Complete system for modeling and implementing climate action, regenerative agriculture, and
-            economic justice. From tiered carbon pricing to universal food security.
+            Complete system for modeling and implementing climate action, regenerative agriculture,
+            and economic justice. From tiered carbon pricing to universal food security.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/" className="inline-block bg-[#16a34a] hover:bg-[#15803d] text-white font-semibold px-6 py-3 rounded-lg transition-colors">
+            <Link
+              href="/"
+              className="inline-block bg-[#16a34a] hover:bg-[#15803d] text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+            >
               🚀 Launch Platform
             </Link>
             <a
@@ -76,7 +79,8 @@ export default function About() {
             </a>
           </div>
           <p className="mt-6 text-sm text-[#64748b]">
-            Created by <strong className="text-[#94a3b8]">Braden Chance</strong> · Minnesota Cannabis Society
+            Created by <strong className="text-[#94a3b8]">Braden Chance</strong> · Minnesota
+            Cannabis Society
           </p>
         </motion.div>
       </section>
@@ -142,10 +146,13 @@ export default function About() {
           </div>
 
           <div className="mt-10">
-            <Link href="/" className="inline-flex items-center gap-2 text-[#10b981] hover:underline text-sm">
-            <ArrowLeft className="h-4 w-4" />
-            Back to Dashboard
-          </Link>
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-[#10b981] hover:underline text-sm"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Dashboard
+            </Link>
           </div>
         </div>
       </section>

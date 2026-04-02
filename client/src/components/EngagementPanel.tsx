@@ -1,28 +1,21 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  MessageSquare, 
-  Mail, 
-  Send, 
-  X,
-  CheckCircle,
-  Share2
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useToast } from '@/hooks/use-toast';
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { MessageSquare, Mail, Send, X, CheckCircle, Share2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 
 export function FeedbackForm() {
   const { toast } = useToast();
   const [showForm, setShowForm] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
+    name: "",
+    email: "",
+    message: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -31,19 +24,19 @@ export function FeedbackForm() {
     setTimeout(() => {
       setShowForm(false);
       setSubmitted(false);
-      setFormData({ name: '', email: '', message: '' });
+      setFormData({ name: "", email: "", message: "" });
       toast({
-        title: 'Thank you!',
-        description: 'Your feedback has been submitted successfully.',
+        title: "Thank you!",
+        description: "Your feedback has been submitted successfully.",
       });
     }, 2000);
   };
 
   if (!showForm) {
     return (
-      <Button 
-        variant="outline" 
-        size="sm" 
+      <Button
+        variant="outline"
+        size="sm"
         className="gap-2"
         onClick={() => setShowForm(true)}
         data-testid="button-feedback"
@@ -58,9 +51,9 @@ export function FeedbackForm() {
     <Card className="w-full max-w-md">
       <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
         <CardTitle className="text-lg">Share Your Feedback</CardTitle>
-        <Button 
-          variant="ghost" 
-          size="icon" 
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={() => setShowForm(false)}
           data-testid="button-close-feedback"
         >
@@ -86,7 +79,9 @@ export function FeedbackForm() {
               className="space-y-3"
             >
               <div className="space-y-1">
-                <Label htmlFor="name" className="text-sm">Name</Label>
+                <Label htmlFor="name" className="text-sm">
+                  Name
+                </Label>
                 <Input
                   id="name"
                   value={formData.name}
@@ -96,7 +91,9 @@ export function FeedbackForm() {
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="email" className="text-sm">Email</Label>
+                <Label htmlFor="email" className="text-sm">
+                  Email
+                </Label>
                 <Input
                   id="email"
                   type="email"
@@ -107,7 +104,9 @@ export function FeedbackForm() {
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="message" className="text-sm">Message</Label>
+                <Label htmlFor="message" className="text-sm">
+                  Message
+                </Label>
                 <Textarea
                   id="message"
                   value={formData.message}
@@ -117,7 +116,12 @@ export function FeedbackForm() {
                   data-testid="input-feedback-message"
                 />
               </div>
-              <Button type="submit" className="w-full" size="sm" data-testid="button-submit-feedback">
+              <Button
+                type="submit"
+                className="w-full"
+                size="sm"
+                data-testid="button-submit-feedback"
+              >
                 <Send className="h-4 w-4 mr-2" />
                 Send Feedback
               </Button>
@@ -131,19 +135,19 @@ export function FeedbackForm() {
 
 export function NewsletterSignup() {
   const { toast } = useToast();
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
-    
+
     setSubscribed(true);
     toast({
-      title: 'Subscribed!',
-      description: 'You\'ll receive updates about the Gaia Commons initiative.',
+      title: "Subscribed!",
+      description: "You'll receive updates about the Gaia Commons initiative.",
     });
-    setEmail('');
+    setEmail("");
     setTimeout(() => setSubscribed(false), 3000);
   };
 
@@ -166,17 +170,13 @@ export function NewsletterSignup() {
           disabled={subscribed}
           data-testid="input-newsletter-email"
         />
-        <Button 
-          type="submit" 
-          size="sm" 
+        <Button
+          type="submit"
+          size="sm"
           disabled={subscribed}
           data-testid="button-newsletter-subscribe"
         >
-          {subscribed ? (
-            <CheckCircle className="h-4 w-4" />
-          ) : (
-            'Subscribe'
-          )}
+          {subscribed ? <CheckCircle className="h-4 w-4" /> : "Subscribe"}
         </Button>
       </form>
     </div>
@@ -185,20 +185,20 @@ export function NewsletterSignup() {
 
 export function SocialShareButtons() {
   const { toast } = useToast();
-  const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
 
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(shareUrl);
       toast({
-        title: 'Link Copied',
-        description: 'Dashboard link copied to clipboard.',
+        title: "Link Copied",
+        description: "Dashboard link copied to clipboard.",
       });
     } catch {
       toast({
-        title: 'Copy Failed',
-        description: 'Could not copy link. Please copy the URL manually.',
-        variant: 'destructive',
+        title: "Copy Failed",
+        description: "Could not copy link. Please copy the URL manually.",
+        variant: "destructive",
       });
     }
   };
@@ -206,12 +206,7 @@ export function SocialShareButtons() {
   return (
     <div className="flex items-center gap-1">
       <span className="text-sm text-muted-foreground mr-1">Share:</span>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={handleCopyLink}
-        data-testid="button-share-link"
-      >
+      <Button variant="ghost" size="icon" onClick={handleCopyLink} data-testid="button-share-link">
         <Share2 className="h-4 w-4" />
       </Button>
     </div>

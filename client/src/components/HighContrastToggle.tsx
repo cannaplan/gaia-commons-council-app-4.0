@@ -29,7 +29,7 @@ export function HighContrastProvider({ children }: { children: React.ReactNode }
   }, []);
 
   const toggleHighContrast = () => {
-    setIsHighContrast(prev => {
+    setIsHighContrast((prev) => {
       const newValue = !prev;
       if (newValue) {
         document.documentElement.classList.add("high-contrast");
@@ -57,8 +57,8 @@ export function HighContrastToggle() {
     toggleHighContrast();
     toast({
       title: isHighContrast ? "High contrast disabled" : "High contrast enabled",
-      description: isHighContrast 
-        ? "Standard color scheme restored" 
+      description: isHighContrast
+        ? "Standard color scheme restored"
         : "Enhanced visibility for better readability",
     });
   };
@@ -72,11 +72,7 @@ export function HighContrastToggle() {
       title={isHighContrast ? "Disable high contrast" : "Enable high contrast"}
       data-testid="button-high-contrast"
     >
-      {isHighContrast ? (
-        <Eye className="h-5 w-5" />
-      ) : (
-        <EyeOff className="h-5 w-5" />
-      )}
+      {isHighContrast ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
     </Button>
   );
 }

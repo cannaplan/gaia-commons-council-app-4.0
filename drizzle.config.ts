@@ -2,7 +2,7 @@ import { defineConfig } from "drizzle-kit";
 
 const dbUrl =
   process.env.NODE_ENV === "production"
-    ? process.env.PRODUCTION_DATABASE_URL ?? process.env.DATABASE_URL
+    ? (process.env.PRODUCTION_DATABASE_URL ?? process.env.DATABASE_URL)
     : process.env.DATABASE_URL;
 
 if (!dbUrl) {

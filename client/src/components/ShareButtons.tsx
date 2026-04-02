@@ -15,10 +15,10 @@ interface ShareButtonsProps {
   url?: string;
 }
 
-export function ShareButtons({ 
+export function ShareButtons({
   title = "Gaia Commons Council - One Vote, Forever Fed",
   text = "Check out the Gaia Commons Council dashboard for the 2026 ballot initiative bringing sustainable food systems to Minnesota!",
-  url = typeof window !== "undefined" ? window.location.href : ""
+  url = typeof window !== "undefined" ? window.location.href : "",
 }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
