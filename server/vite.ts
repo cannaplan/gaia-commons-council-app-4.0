@@ -7,6 +7,7 @@ import fs from "fs";
 import path from "path";
 import { nanoid } from "nanoid";
 import { fileURLToPath } from "url";
+import rateLimit from "express-rate-limit";
 
 const viteLogger = createLogger();
 
@@ -33,7 +34,9 @@ export async function setupVite(server: Server, app: Express) {
 
   app.use(vite.middlewares);
 
-  app.use("*", async (req, res, next) => {
+  const pageLimiter = rateLimit({ windowMs: 60_000, max: 120 });
+
+  app.use("*", pageLimiter, async (req, res, next) => {
     const url = req.originalUrl;
 
     try {

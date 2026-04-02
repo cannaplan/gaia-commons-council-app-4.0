@@ -318,9 +318,9 @@ export async function registerRoutes(
       return res.status(400).json({ message: "name and email are required" });
     }
     const emailLower = email.toLowerCase().trim();
-    // Basic email format validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(emailLower)) {
+    // RFC 5321 length guard (prevents ReDoS on regex)
+    const MAX_EMAIL_LENGTH = 254;
+    if (emailLower.length > MAX_EMAIL_LENGTH || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailLower)) {
       return res.status(400).json({ message: "Invalid email address" });
     }
     const sanitizedName = name.trim().slice(0, 200);
