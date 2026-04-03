@@ -2,59 +2,164 @@
 @tailwind components;
 @tailwind utilities;
 
-/* -------------------------------------------
-   Global design tokens & typography
-   ------------------------------------------- */
+/*
+ * Gaia Commons — Design Tokens
+ *
+ * Brand palette (light)
+ *   Primary   #4CAF50  → 122 39% 49%  (earthy green)
+ *   Secondary #8BC6EC  → 204 72% 74%  (calming blue)
+ *   Accent    #FFE082  → 45 100% 75%  (vibrant yellow)
+ *   Bg        #F7F7F7  → 0 0% 97%
+ *   Text      #333333  → 0 0% 20%
+ */
+
 :root {
   /* Typography */
-  --font-display: 'Roboto', sans-serif;
-  --font-body: 'Roboto', sans-serif;
-  --font-serif: 'Merriweather', serif;
+  --font-sans: 'Roboto', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Merriweather', ui-serif, Georgia, serif;
+  --font-mono: ui-monospace, 'Fira Code', monospace;
+  --font-display: var(--font-sans);
+  --font-body: var(--font-sans);
 
-  /* Gaia Commons Brand Colors */
-  /* Primary: #4CAF50 (soft earthy green) = 122 39% 49% */
-  /* Secondary: #8BC6EC (calming blue) = 204 72% 74% */
-  /* Accent: #FFE082 (vibrant yellow) = 45 100% 75% */
-  /* Background: #F7F7F7 = 0 0% 97% */
-  /* Text: #333333 = 0 0% 20% */
-  
+  /* Base */
   --background: 0 0% 97%;
   --foreground: 0 0% 20%;
-  
+
+  /* Primary */
   --primary: 122 39% 49%;
   --primary-foreground: 0 0% 100%;
-  
+  --primary-border: hsl(122 39% 42%);
+
+  /* Secondary */
   --secondary: 204 72% 74%;
   --secondary-foreground: 204 50% 20%;
-  
+  --secondary-border: hsl(204 50% 64%);
+
+  /* Muted */
   --muted: 0 0% 92%;
   --muted-foreground: 0 0% 45%;
-  
+  --muted-border: hsl(0 0% 82%);
+
+  /* Accent */
   --accent: 45 100% 75%;
   --accent-foreground: 45 60% 20%;
-  
+  --accent-border: hsl(45 80% 60%);
+  --accent-warm: 35 80% 63%;
+
+  /* Destructive */
   --destructive: 0 70% 60%;
   --destructive-foreground: 0 0% 98%;
+  --destructive-border: hsl(0 60% 50%);
 
+  /* Card */
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 20%;
+  --card-border: 0 0% 88%;
+
+  /* Popover */
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 20%;
+  --popover-border: 0 0% 88%;
+
+  /* Inputs & chrome */
   --border: 0 0% 88%;
   --input: 0 0% 88%;
   --ring: 122 39% 49%;
-  
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 20%;
-  
   --radius: 0.5rem;
+
+  /* Sidebar */
+  --sidebar: 0 0% 95%;
+  --sidebar-foreground: 0 0% 20%;
+  --sidebar-border: 0 0% 88%;
+  --sidebar-ring: 122 39% 49%;
+  --sidebar-primary: 122 39% 49%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-primary-border: hsl(122 39% 42%);
+  --sidebar-accent: 0 0% 90%;
+  --sidebar-accent-foreground: 0 0% 20%;
+  --sidebar-accent-border: hsl(0 0% 82%);
+
+  /* Chart (data-vis palette) */
+  --chart-1: 122 39% 49%;
+  --chart-2: 204 72% 54%;
+  --chart-3: 45 100% 55%;
+  --chart-4: 280 60% 55%;
+  --chart-5: 15 80% 55%;
 }
 
-/* -------------------------------------------
-   Base layer (applies theme-aware classes via Tailwind tokens)
-   ------------------------------------------- */
+/* ---- Dark mode ---- */
+.dark {
+  /* Base */
+  --background: 236 63% 4%;
+  --foreground: 220 14% 92%;
+
+  /* Primary */
+  --primary: 268 71% 44%;
+  --primary-foreground: 0 0% 100%;
+  --primary-border: hsl(268 60% 36%);
+
+  /* Secondary */
+  --secondary: 255 18% 18%;
+  --secondary-foreground: 0 0% 100%;
+  --secondary-border: hsl(255 14% 26%);
+
+  /* Muted */
+  --muted: 228 10% 12%;
+  --muted-foreground: 220 10% 70%;
+  --muted-border: hsl(228 8% 20%);
+
+  /* Accent */
+  --accent: 255 92% 76%;
+  --accent-foreground: 255 92% 10%;
+  --accent-border: hsl(255 70% 60%);
+  --accent-warm: 35 80% 63%;
+
+  /* Destructive */
+  --destructive: 0 70% 55%;
+  --destructive-foreground: 0 0% 98%;
+  --destructive-border: hsl(0 60% 44%);
+
+  /* Card */
+  --card: 233 14% 6%;
+  --card-foreground: 220 14% 92%;
+  --card-border: 230 8% 12%;
+
+  /* Popover */
+  --popover: 233 14% 8%;
+  --popover-foreground: 220 14% 92%;
+  --popover-border: 230 8% 14%;
+
+  /* Inputs & chrome */
+  --border: 230 8% 12%;
+  --input: 230 6% 14%;
+  --ring: 268 71% 44%;
+  --radius: 0.5rem;
+
+  /* Sidebar */
+  --sidebar: 233 14% 5%;
+  --sidebar-foreground: 220 14% 92%;
+  --sidebar-border: 230 8% 12%;
+  --sidebar-ring: 268 71% 44%;
+  --sidebar-primary: 268 71% 44%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-primary-border: hsl(268 60% 36%);
+  --sidebar-accent: 228 10% 10%;
+  --sidebar-accent-foreground: 220 14% 92%;
+  --sidebar-accent-border: hsl(228 8% 18%);
+
+  /* Chart (data-vis palette — dark) */
+  --chart-1: 268 71% 60%;
+  --chart-2: 204 72% 64%;
+  --chart-3: 45 100% 65%;
+  --chart-4: 310 60% 60%;
+  --chart-5: 15 80% 60%;
+}
+
+/* ---- Base layer ---- */
 @layer base {
   body {
-    @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
+    @apply bg-background text-foreground antialiased;
     font-family: var(--font-body);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     line-height: 1.4;
   }
 
@@ -64,14 +169,12 @@
   }
 
   a {
-    color: hsl(var(--primary) / 1);
+    color: hsl(var(--primary));
     text-decoration: none;
   }
 }
 
-/* -------------------------------------------
-   Utility layer: small helper classes
-   ------------------------------------------- */
+/* ---- Utility helpers ---- */
 @layer utilities {
   .glass-panel {
     @apply bg-white/70 backdrop-blur-md border border-white/50 shadow-xl;
@@ -82,49 +185,11 @@
   }
 }
 
-/* -------------------------------------------
-   Dark mode — full replacement for dark variables
-   ------------------------------------------- */
-.dark {
-  /* Background & text for dark mode */
-  --background: 236 63% 4%;
-  --foreground: 220 14% 92%;
-
-  --primary: 268 71% 44%;
-  --primary-foreground: 0 0% 100%;
-
-  --secondary: 255 18% 18%;
-  --secondary-foreground: 0 0% 100%;
-
-  --muted: 228 10% 12%;
-  --muted-foreground: 220 10% 70%;
-
-  --accent: 255 92% 76%;
-  --accent-foreground: 255 92% 10%;
-
-  --accent-warm: 35 80% 63%;
-
-  --destructive: 0 70% 55%;
-  --destructive-foreground: 0 0% 98%;
-
-  --border: 230 8% 12%;
-  --input: 230 6% 14%;
-  --ring: 268 71% 44%;
-
-  --card: 233 14% 6%;
-  --card-foreground: 220 14% 92%;
-
-  --radius: 0.5rem;
-}
-
-/* -------------------------------------------
-   Dark-mode helpers and specific selectors
-   ------------------------------------------- */
 .dark .glass-panel {
   @apply bg-black/30 backdrop-blur-md border border-white/10 shadow-xl shadow-black/20;
 }
 
-/* Print styles */
+/* ---- Print ---- */
 @media print {
   body {
     background: white !important;
@@ -168,28 +233,4 @@
   @page {
     margin: 1.5cm;
   }
-}
-
-/* Card layout helpers */
-.card, [class*="card"] {
-  break-inside: avoid;
-  page-break-inside: avoid;
-}
-
-/* Metric tile / KPI minimal styles */
-.kpi-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: hsl(var(--foreground));
-}
-.kpi-value {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: hsl(var(--primary));
-}
-
-/* Small responsive helpers */
-@media (max-width: 900px) {
-  .sidebar { display: none; }
-  .app-container { padding: 0 12px; }
 }
