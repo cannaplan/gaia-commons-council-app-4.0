@@ -1,23 +1,19 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import * as AccordionPrimitive from "@radix-ui/react-accordion"
-import { ChevronDown } from "lucide-react"
+import * as React from "react";
+import * as AccordionPrimitive from "@radix-ui/react-accordion";
+import { ChevronDown } from "lucide-react";
 
-import { cn } from "@/lib/utils"
-import { useCollapsibleContext } from "@/components/CollapseAllToggle"
+import { cn } from "@/lib/utils";
+import { useCollapsibleContext } from "@/components/CollapseAllToggle";
 
 const AccordionItem = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
 >(({ className, ...props }, ref) => (
-  <AccordionPrimitive.Item
-    ref={ref}
-    className={cn("border-b", className)}
-    {...props}
-  />
-))
-AccordionItem.displayName = "AccordionItem"
+  <AccordionPrimitive.Item ref={ref} className={cn("border-b", className)} {...props} />
+));
+AccordionItem.displayName = "AccordionItem";
 
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
@@ -28,7 +24,7 @@ const AccordionTrigger = React.forwardRef<
       ref={ref}
       className={cn(
         "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
-        className
+        className,
       )}
       {...props}
     >
@@ -36,8 +32,8 @@ const AccordionTrigger = React.forwardRef<
       <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
-))
-AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName ?? "AccordionTrigger"
+));
+AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName ?? "AccordionTrigger";
 
 const AccordionContent = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Content>,
@@ -50,9 +46,9 @@ const AccordionContent = React.forwardRef<
   >
     <div className={cn("pb-4 pt-0", className)}>{children}</div>
   </AccordionPrimitive.Content>
-))
+));
 
-AccordionContent.displayName = AccordionPrimitive.Content.displayName ?? "AccordionContent"
+AccordionContent.displayName = AccordionPrimitive.Content.displayName ?? "AccordionContent";
 
 /**
  * Accordion (controlled by Collapsible context)
@@ -74,44 +70,44 @@ export const Accordion: React.FC<React.PropsWithChildren<Record<string, any>>> =
   children,
   ...props
 }) => {
-  const { globalState } = useCollapsibleContext()
+  const { globalState } = useCollapsibleContext();
 
   // Recursively collect `value` props from AccordionItem elements under `children`.
   const collectValues = (nodes: React.ReactNode): string[] => {
-    const values: string[] = []
+    const values: string[] = [];
     const helper = (n: React.ReactNode) => {
       React.Children.forEach(n, (child) => {
-        if (!React.isValidElement(child)) return
-        const c: any = child
+        if (!React.isValidElement(child)) return;
+        const c: any = child;
         // If this element is an AccordionItem (or any element with a `value` prop), capture it.
         if (c.props && typeof c.props.value === "string") {
-          values.push(c.props.value)
+          values.push(c.props.value);
         }
         // Recurse into children of this element
         if (c.props && c.props.children) {
-          helper(c.props.children)
+          helper(c.props.children);
         }
-      })
-    }
-    helper(nodes)
-    return values
-  }
+      });
+    };
+    helper(nodes);
+    return values;
+  };
 
-  const itemValues = React.useMemo(() => collectValues(children), [children])
+  const itemValues = React.useMemo(() => collectValues(children), [children]);
 
   // Controlled value:
   // - undefined => don't pass `value` prop (uncontrolled)
   // - false => collapse all => pass []
   // - true => expand all => pass all values found
   const controlledValue: string[] | undefined =
-    globalState === undefined ? undefined : globalState ? itemValues : []
+    globalState === undefined ? undefined : globalState ? itemValues : [];
 
   // Use type="multiple" so multiple items can be open at once.
   // Only attach `value` prop when controlledValue is not undefined.
   const rootProps =
     controlledValue === undefined
       ? { type: "multiple" as const }
-      : ({ type: "multiple" as const, value: controlledValue } as const)
+      : ({ type: "multiple" as const, value: controlledValue } as const);
 
   return (
     // spreading rootProps will either include value or not depending on controlledValue
@@ -120,8 +116,8 @@ export const Accordion: React.FC<React.PropsWithChildren<Record<string, any>>> =
     <AccordionPrimitive.Root {...rootProps} {...props}>
       {children}
     </AccordionPrimitive.Root>
-  )
-}
-Accordion.displayName = "Accordion"
+  );
+};
+Accordion.displayName = "Accordion";
 
-export { AccordionItem, AccordionTrigger, AccordionContent }
+export { AccordionItem, AccordionTrigger, AccordionContent };

@@ -127,9 +127,7 @@ const CustomTooltip = ({ active, payload }: any) => {
     return (
       <div className="bg-background border rounded-lg shadow-lg p-3">
         <p className="font-bold text-foreground">{data.name}</p>
-        <p className="text-sm text-muted-foreground">
-          {formatNumber(data.jobs)} jobs
-        </p>
+        <p className="text-sm text-muted-foreground">{formatNumber(data.jobs)} jobs</p>
       </div>
     );
   }
@@ -142,7 +140,9 @@ interface JobsBreakdownChartProps {
 
 const validScales: Scale[] = ["pilot", "statewide", "national", "global"];
 
-export default function JobsBreakdownChart({ defaultScale = "statewide" }: JobsBreakdownChartProps) {
+export default function JobsBreakdownChart({
+  defaultScale = "statewide",
+}: JobsBreakdownChartProps) {
   const safeDefaultScale = validScales.includes(defaultScale) ? defaultScale : "statewide";
   const [scale, setScale] = useState<Scale>(safeDefaultScale);
   const [viewType, setViewType] = useState<"permanent" | "construction">("permanent");
@@ -223,12 +223,7 @@ export default function JobsBreakdownChart({ defaultScale = "statewide" }: JobsB
                   >
                     <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                     <XAxis type="number" tickFormatter={(value) => formatNumber(value)} />
-                    <YAxis
-                      dataKey="name"
-                      type="category"
-                      width={120}
-                      tick={{ fontSize: 11 }}
-                    />
+                    <YAxis dataKey="name" type="category" width={120} tick={{ fontSize: 11 }} />
                     <Tooltip content={<CustomTooltip />} />
                     <Bar dataKey="jobs" radius={[0, 4, 4, 0]}>
                       {chartData.map((entry, index) => (
@@ -266,7 +261,10 @@ export default function JobsBreakdownChart({ defaultScale = "statewide" }: JobsB
               </div>
             </div>
 
-            <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3" data-testid="container-job-categories">
+            <div
+              className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3"
+              data-testid="container-job-categories"
+            >
               {chartData.slice(0, 4).map((cat, idx) => (
                 <motion.div
                   key={cat.name}
@@ -275,7 +273,7 @@ export default function JobsBreakdownChart({ defaultScale = "statewide" }: JobsB
                   transition={{ delay: idx * 0.1 }}
                   className="p-3 rounded-lg text-center"
                   style={{ backgroundColor: `${cat.color}20` }}
-                  data-testid={`card-job-category-${cat.name.toLowerCase().replace(/\s+/g, '-')}`}
+                  data-testid={`card-job-category-${cat.name.toLowerCase().replace(/\s+/g, "-")}`}
                 >
                   <div className="font-bold text-lg" style={{ color: cat.color }}>
                     {formatNumber(cat.jobs)}
@@ -289,8 +287,8 @@ export default function JobsBreakdownChart({ defaultScale = "statewide" }: JobsB
               <div className="mt-4 p-4 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
                 <p className="text-sm text-center">
                   <strong className="text-emerald-600">100% Union Labor</strong> at{" "}
-                  <strong>$32-35/hr</strong> prevailing wages. All jobs are permanent with
-                  full benefits, funded perpetually by the endowment.
+                  <strong>$32-35/hr</strong> prevailing wages. All jobs are permanent with full
+                  benefits, funded perpetually by the endowment.
                 </p>
               </div>
             )}
@@ -298,9 +296,8 @@ export default function JobsBreakdownChart({ defaultScale = "statewide" }: JobsB
             {viewType === "construction" && (
               <div className="mt-4 p-4 bg-amber-500/10 rounded-lg border border-amber-500/20">
                 <p className="text-sm text-center">
-                  <strong className="text-amber-600">Union trades:</strong> IBEW
-                  (electricians), UA (plumbers), SMART (HVAC), UBC (carpenters).
-                  100% local hire priority.
+                  <strong className="text-amber-600">Union trades:</strong> IBEW (electricians), UA
+                  (plumbers), SMART (HVAC), UBC (carpenters). 100% local hire priority.
                 </p>
               </div>
             )}

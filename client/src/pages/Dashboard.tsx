@@ -72,7 +72,10 @@ export default function Dashboard(): JSX.Element {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style={{ marginTop: 12 }}>
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          style={{ marginTop: 12 }}
+        >
           <CollapsibleCard id="statewide" title="Statewide Scale">
             <div style={{ display: "grid", gap: 10 }}>
               <div>
@@ -104,7 +107,9 @@ export default function Dashboard(): JSX.Element {
 
           <CollapsibleCard id="investor" title="Investor Dashboard">
             <div>
-              <div>Pilot square feet: <strong>{formatNumber(pilot?.sqft)}</strong></div>
+              <div>
+                Pilot square feet: <strong>{formatNumber(pilot?.sqft)}</strong>
+              </div>
             </div>
           </CollapsibleCard>
 

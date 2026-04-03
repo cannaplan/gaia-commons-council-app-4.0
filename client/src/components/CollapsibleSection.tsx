@@ -48,10 +48,7 @@ export function CollapsibleSection({
           {icon}
           <span className="text-lg font-semibold flex-1 text-left">{title}</span>
           {badge && <span className="mr-2">{badge}</span>}
-          <motion.div
-            animate={{ rotate: isOpen ? 180 : 0 }}
-            transition={{ duration: 0.2 }}
-          >
+          <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
             <ChevronDown className="h-5 w-5 text-muted-foreground" />
           </motion.div>
         </Button>

@@ -1,8 +1,8 @@
 // @vitest-environment node
-import { vi, describe, it, expect, beforeAll } from 'vitest';
+import { vi, describe, it, expect, beforeAll } from "vitest";
 
 // Mock storage before importing routes (prevents DB connection)
-vi.mock('../storage', () => ({
+vi.mock("../storage", () => ({
   storage: {
     isEmpty: vi.fn().mockResolvedValue(false),
     getTribalPartnerships: vi.fn().mockResolvedValue([{ id: 1 }]),
@@ -17,15 +17,21 @@ vi.mock('../storage', () => ({
     getGlobalRegenerationSummary: vi.fn().mockResolvedValue({ id: 1 }),
     getK12Curriculum: vi.fn().mockResolvedValue([{ id: 1 }]),
     getFundingSources: vi.fn().mockResolvedValue([{ id: 1 }]),
-    getScaleProjections: vi.fn().mockResolvedValue([
-      { id: 1, scale: 'statewide', greenhouses: 1200, schools: 3100, students: 900000 },
-    ]),
-    getPilotStats: vi.fn().mockResolvedValue({ id: 1, students: 5630, sqft: 49250, schools: 6, status: 'live' }),
-    getEndowmentStats: vi.fn().mockResolvedValue({ id: 1, size: '5.0B', annual: '225M', greenhouses: 1200 }),
-    getTimelineEvents: vi.fn().mockResolvedValue([{ id: 1, event: 'test' }]),
+    getScaleProjections: vi
+      .fn()
+      .mockResolvedValue([
+        { id: 1, scale: "statewide", greenhouses: 1200, schools: 3100, students: 900000 },
+      ]),
+    getPilotStats: vi
+      .fn()
+      .mockResolvedValue({ id: 1, students: 5630, sqft: 49250, schools: 6, status: "live" }),
+    getEndowmentStats: vi
+      .fn()
+      .mockResolvedValue({ id: 1, size: "5.0B", annual: "225M", greenhouses: 1200 }),
+    getTimelineEvents: vi.fn().mockResolvedValue([{ id: 1, event: "test" }]),
     getFinancialMetrics: vi.fn().mockResolvedValue({ id: 1 }),
     getClimateMetrics: vi.fn().mockResolvedValue({ id: 1 }),
-    getSlides: vi.fn().mockResolvedValue([{ id: 1, title: 'Slide 1' }]),
+    getSlides: vi.fn().mockResolvedValue([{ id: 1, title: "Slide 1" }]),
     getHistoricalFinancials: vi.fn().mockResolvedValue([]),
     getSchoolClusters: vi.fn().mockResolvedValue([]),
     getSchools: vi.fn().mockResolvedValue([]),
@@ -93,10 +99,10 @@ vi.mock('../storage', () => ({
   },
 }));
 
-import express from 'express';
-import { createServer } from 'http';
-import supertest from 'supertest';
-import { registerRoutes } from '../routes';
+import express from "express";
+import { createServer } from "http";
+import supertest from "supertest";
+import { registerRoutes } from "../routes";
 
 let app: ReturnType<typeof express>;
 
@@ -109,40 +115,45 @@ beforeAll(async () => {
 });
 
 // ── POST /api/dao/signature edge cases ──────────────────────────────────────
-describe('POST /api/dao/signature edge cases', () => {
-  it('ignores extra/unexpected fields and still succeeds', async () => {
+describe("POST /api/dao/signature edge cases", () => {
+  it("ignores extra/unexpected fields and still succeeds", async () => {
     const res = await supertest(app)
-      .post('/api/dao/signature')
-      .send({ name: 'Edge Tester', email: 'edge-extra@example.com', extraField: 'ignored', foo: 42 });
+      .post("/api/dao/signature")
+      .send({
+        name: "Edge Tester",
+        email: "edge-extra@example.com",
+        extraField: "ignored",
+        foo: 42,
+      });
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
   });
 
-  it('accepts a very long (but valid) name', async () => {
-    const longName = 'A'.repeat(200);
+  it("accepts a very long (but valid) name", async () => {
+    const longName = "A".repeat(200);
     const res = await supertest(app)
-      .post('/api/dao/signature')
-      .send({ name: longName, email: 'edge-longname@example.com' });
+      .post("/api/dao/signature")
+      .send({ name: longName, email: "edge-longname@example.com" });
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
   });
 
-  it('accepts a very long (but valid) email local part', async () => {
-    const longLocal = 'b'.repeat(60);
+  it("accepts a very long (but valid) email local part", async () => {
+    const longLocal = "b".repeat(60);
     const res = await supertest(app)
-      .post('/api/dao/signature')
-      .send({ name: 'Long Email', email: `${longLocal}@example.com` });
+      .post("/api/dao/signature")
+      .send({ name: "Long Email", email: `${longLocal}@example.com` });
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
   });
 });
 
 // ── GET /api/dao/stats daysRemaining calculation ─────────────────────────────
-describe('GET /api/dao/stats daysRemaining calculation', () => {
-  it('daysRemaining is a positive number less than 500', async () => {
+describe("GET /api/dao/stats daysRemaining calculation", () => {
+  it("daysRemaining is a positive number less than 500", async () => {
     // The filing deadline is fixed at 2026-07-01. 500 days is a generous upper
     // bound that covers any reasonable test run date before the 2026 deadline.
-    const res = await supertest(app).get('/api/dao/stats');
+    const res = await supertest(app).get("/api/dao/stats");
     expect(res.status).toBe(200);
     expect(res.body.daysRemaining).toBeGreaterThan(0);
     expect(res.body.daysRemaining).toBeLessThan(500);
@@ -150,35 +161,35 @@ describe('GET /api/dao/stats daysRemaining calculation', () => {
 });
 
 // ── GET /api/slides ─────────────────────────────────────────────────────────
-describe('GET /api/slides', () => {
-  it('returns an array', async () => {
-    const res = await supertest(app).get('/api/slides');
+describe("GET /api/slides", () => {
+  it("returns an array", async () => {
+    const res = await supertest(app).get("/api/slides");
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });
 });
 
 // ── GET /api/scale-projections canonical values ──────────────────────────────
-describe('GET /api/scale-projections canonical values', () => {
-  it('returns an array', async () => {
-    const res = await supertest(app).get('/api/scale-projections');
+describe("GET /api/scale-projections canonical values", () => {
+  it("returns an array", async () => {
+    const res = await supertest(app).get("/api/scale-projections");
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });
 
-  it('contains a statewide projection with 900000 students', async () => {
-    const res = await supertest(app).get('/api/scale-projections');
+  it("contains a statewide projection with 900000 students", async () => {
+    const res = await supertest(app).get("/api/scale-projections");
     expect(res.status).toBe(200);
-    const statewide = res.body.find((p: { scale: string }) => p.scale === 'statewide');
+    const statewide = res.body.find((p: { scale: string }) => p.scale === "statewide");
     expect(statewide).toBeDefined();
     expect(statewide.students).toBe(900000);
   });
 });
 
 // ── GET /api/timeline ─────────────────────────────────────────────────────────
-describe('GET /api/timeline', () => {
-  it('returns an array', async () => {
-    const res = await supertest(app).get('/api/timeline');
+describe("GET /api/timeline", () => {
+  it("returns an array", async () => {
+    const res = await supertest(app).get("/api/timeline");
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });

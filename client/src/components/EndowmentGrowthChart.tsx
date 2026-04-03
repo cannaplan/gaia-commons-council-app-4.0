@@ -30,7 +30,7 @@ interface EndowmentGrowthChartProps {
 const generateEndowmentData = (
   initialCorpus: number = 5000000000,
   drawRate: number = 0.045,
-  growthRate: number = 0.07
+  growthRate: number = 0.07,
 ): EndowmentDataPoint[] => {
   const data: EndowmentDataPoint[] = [];
   let corpus = initialCorpus;
@@ -39,7 +39,7 @@ const generateEndowmentData = (
   for (let year = 2028; year <= 2078; year++) {
     const annualDraw = corpus * drawRate;
     cumulativeDraws += annualDraw;
-    
+
     data.push({
       year,
       corpus: Math.round(corpus),
@@ -82,17 +82,17 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 export default function EndowmentGrowthChart({
   initialCorpus = 5000000000,
   drawRate = 0.045,
-  growthRate = 0.07
+  growthRate = 0.07,
 }: EndowmentGrowthChartProps = {}) {
   const [viewMode, setViewMode] = useState<"growth" | "draws">("growth");
   const data = useMemo(
     () => generateEndowmentData(initialCorpus, drawRate, growthRate),
-    [initialCorpus, drawRate, growthRate]
+    [initialCorpus, drawRate, growthRate],
   );
 
   const startData = data[0];
   const endData = data[data.length - 1];
-  const year25Data = data.find(d => d.year === 2053) || data[25];
+  const year25Data = data.find((d) => d.year === 2053) || data[25];
 
   return (
     <Card className="w-full" data-testid="endowment-growth-chart">
@@ -241,9 +241,10 @@ export default function EndowmentGrowthChart({
 
         <div className="mt-4 p-4 bg-muted/50 rounded-lg">
           <p className="text-sm text-muted-foreground text-center">
-            <strong>Key Insight:</strong> With a 4.5% annual draw rate and 7% average market returns, 
-            the endowment grows to <strong>{formatCurrency(endData.corpus)}</strong> over 50 years 
-            while distributing <strong>{formatCurrency(endData.cumulativeDraws)}</strong> in total funding.
+            <strong>Key Insight:</strong> With a 4.5% annual draw rate and 7% average market
+            returns, the endowment grows to <strong>{formatCurrency(endData.corpus)}</strong> over
+            50 years while distributing <strong>{formatCurrency(endData.cumulativeDraws)}</strong>{" "}
+            in total funding.
           </p>
         </div>
       </CardContent>

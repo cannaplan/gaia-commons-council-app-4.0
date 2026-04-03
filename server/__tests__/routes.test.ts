@@ -1,8 +1,8 @@
 // @vitest-environment node
-import { vi, describe, it, expect, beforeAll } from 'vitest';
+import { vi, describe, it, expect, beforeAll } from "vitest";
 
 // Mock storage before importing routes (prevents DB connection)
-vi.mock('../storage', () => ({
+vi.mock("../storage", () => ({
   storage: {
     isEmpty: vi.fn().mockResolvedValue(false),
     // Always-checked tables – return non-empty so seedDatabase skips re-seeding
@@ -18,12 +18,18 @@ vi.mock('../storage', () => ({
     getGlobalRegenerationSummary: vi.fn().mockResolvedValue({ id: 1 }),
     getK12Curriculum: vi.fn().mockResolvedValue([{ id: 1 }]),
     getFundingSources: vi.fn().mockResolvedValue([{ id: 1 }]),
-    getScaleProjections: vi.fn().mockResolvedValue([
-      { id: 1, scale: 'statewide', greenhouses: 1200, schools: 3100, students: 900000 },
-    ]),
+    getScaleProjections: vi
+      .fn()
+      .mockResolvedValue([
+        { id: 1, scale: "statewide", greenhouses: 1200, schools: 3100, students: 900000 },
+      ]),
     // Route handlers – return appropriate data
-    getPilotStats: vi.fn().mockResolvedValue({ id: 1, students: 5630, sqft: 49250, schools: 6, status: 'live' }),
-    getEndowmentStats: vi.fn().mockResolvedValue({ id: 1, size: '5.0B', annual: '225M', greenhouses: 1200 }),
+    getPilotStats: vi
+      .fn()
+      .mockResolvedValue({ id: 1, students: 5630, sqft: 49250, schools: 6, status: "live" }),
+    getEndowmentStats: vi
+      .fn()
+      .mockResolvedValue({ id: 1, size: "5.0B", annual: "225M", greenhouses: 1200 }),
     getTimelineEvents: vi.fn().mockResolvedValue([]),
     getFinancialMetrics: vi.fn().mockResolvedValue({ id: 1 }),
     getClimateMetrics: vi.fn().mockResolvedValue({ id: 1 }),
@@ -96,10 +102,10 @@ vi.mock('../storage', () => ({
   },
 }));
 
-import express from 'express';
-import { createServer } from 'http';
-import supertest from 'supertest';
-import { registerRoutes } from '../routes';
+import express from "express";
+import { createServer } from "http";
+import supertest from "supertest";
+import { registerRoutes } from "../routes";
 
 let app: ReturnType<typeof express>;
 
@@ -112,118 +118,118 @@ beforeAll(async () => {
 });
 
 // ── Health ──────────────────────────────────────────────────────────────────
-describe('Health endpoint', () => {
-  it('GET /health returns 200 with healthy status', async () => {
-    const res = await supertest(app).get('/health');
+describe("Health endpoint", () => {
+  it("GET /health returns 200 with healthy status", async () => {
+    const res = await supertest(app).get("/health");
     expect(res.status).toBe(200);
-    expect(res.body.status).toBe('healthy');
+    expect(res.body.status).toBe("healthy");
   });
 });
 
 // ── DAO Stats ───────────────────────────────────────────────────────────────
-describe('GET /api/dao/stats', () => {
-  it('returns 200 with correct shape', async () => {
-    const res = await supertest(app).get('/api/dao/stats');
+describe("GET /api/dao/stats", () => {
+  it("returns 200 with correct shape", async () => {
+    const res = await supertest(app).get("/api/dao/stats");
     expect(res.status).toBe(200);
-    expect(typeof res.body.totalSignatures).toBe('number');
-    expect(typeof res.body.uniqueVoters).toBe('number');
-    expect(typeof res.body.goalPercentage).toBe('number');
+    expect(typeof res.body.totalSignatures).toBe("number");
+    expect(typeof res.body.uniqueVoters).toBe("number");
+    expect(typeof res.body.goalPercentage).toBe("number");
     expect(res.body.signatureGoal).toBe(120_000);
-    expect(typeof res.body.daysRemaining).toBe('number');
-    expect(typeof res.body.filingDeadline).toBe('string');
+    expect(typeof res.body.daysRemaining).toBe("number");
+    expect(typeof res.body.filingDeadline).toBe("string");
     expect(Array.isArray(res.body.activeProposals)).toBe(true);
   });
 
-  it('activeProposals has 3 proposals with canonical values', async () => {
-    const res = await supertest(app).get('/api/dao/stats');
+  it("activeProposals has 3 proposals with canonical values", async () => {
+    const res = await supertest(app).get("/api/dao/stats");
     expect(res.body.activeProposals).toHaveLength(3);
-    const descriptions = res.body.activeProposals.map((p: { description: string }) => p.description).join(' ');
-    expect(descriptions).toContain('$225M/year');
-    expect(descriptions).toContain('900,000 students');
-    expect(descriptions).toContain('6,553 metric tons');
+    const descriptions = res.body.activeProposals
+      .map((p: { description: string }) => p.description)
+      .join(" ");
+    expect(descriptions).toContain("$225M/year");
+    expect(descriptions).toContain("900,000 students");
+    expect(descriptions).toContain("6,553 metric tons");
   });
 });
 
 // ── DAO Signature Submission ────────────────────────────────────────────────
 // Note: daoSignatures is an in-memory array in routes.ts; state accumulates
 // across tests in this file (tests run sequentially in declaration order).
-describe('POST /api/dao/signature', () => {
-  it('valid submission returns 200 with success: true', async () => {
+describe("POST /api/dao/signature", () => {
+  it("valid submission returns 200 with success: true", async () => {
     const res = await supertest(app)
-      .post('/api/dao/signature')
-      .send({ name: 'Jane Doe', email: 'test-unique-jane@example.com' });
+      .post("/api/dao/signature")
+      .send({ name: "Jane Doe", email: "test-unique-jane@example.com" });
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
   });
 
-  it('missing name returns 400', async () => {
+  it("missing name returns 400", async () => {
     const res = await supertest(app)
-      .post('/api/dao/signature')
-      .send({ email: 'no-name@example.com' });
+      .post("/api/dao/signature")
+      .send({ email: "no-name@example.com" });
     expect(res.status).toBe(400);
   });
 
-  it('missing email returns 400', async () => {
-    const res = await supertest(app)
-      .post('/api/dao/signature')
-      .send({ name: 'No Email' });
+  it("missing email returns 400", async () => {
+    const res = await supertest(app).post("/api/dao/signature").send({ name: "No Email" });
     expect(res.status).toBe(400);
   });
 
-  it('invalid email format returns 400', async () => {
+  it("invalid email format returns 400", async () => {
     const res = await supertest(app)
-      .post('/api/dao/signature')
-      .send({ name: 'Bad Email', email: 'not-an-email' });
+      .post("/api/dao/signature")
+      .send({ name: "Bad Email", email: "not-an-email" });
     expect(res.status).toBe(400);
   });
 
-  it('duplicate email returns 409', async () => {
+  it("duplicate email returns 409", async () => {
     // Re-submit the same email used in the valid-submission test above
     const res = await supertest(app)
-      .post('/api/dao/signature')
-      .send({ name: 'Jane Doe Again', email: 'test-unique-jane@example.com' });
+      .post("/api/dao/signature")
+      .send({ name: "Jane Doe Again", email: "test-unique-jane@example.com" });
     expect(res.status).toBe(409);
   });
 
-  it('after successful submission totalSignatures is incremented', async () => {
-    const before = await supertest(app).get('/api/dao/stats');
+  it("after successful submission totalSignatures is incremented", async () => {
+    const before = await supertest(app).get("/api/dao/stats");
     const countBefore: number = before.body.totalSignatures;
 
     await supertest(app)
-      .post('/api/dao/signature')
-      .send({ name: 'New Signer', email: 'test-new-signer@example.com' });
+      .post("/api/dao/signature")
+      .send({ name: "New Signer", email: "test-new-signer@example.com" });
 
-    const after = await supertest(app).get('/api/dao/stats');
+    const after = await supertest(app).get("/api/dao/stats");
     expect(after.body.totalSignatures).toBe(countBefore + 1);
   });
 });
 
 // ── Data endpoint smoke tests ────────────────────────────────────────────────
-describe('Data endpoints (smoke tests)', () => {
-  it('GET /api/pilot returns 200', async () => {
-    const res = await supertest(app).get('/api/pilot');
+describe("Data endpoints (smoke tests)", () => {
+  it("GET /api/pilot returns 200", async () => {
+    const res = await supertest(app).get("/api/pilot");
     expect(res.status).toBe(200);
   });
 
-  it('GET /api/endowment returns 200', async () => {
-    const res = await supertest(app).get('/api/endowment');
+  it("GET /api/endowment returns 200", async () => {
+    const res = await supertest(app).get("/api/endowment");
     expect(res.status).toBe(200);
   });
 
-  it('GET /api/timeline returns 200 with an array', async () => {
-    const res = await supertest(app).get('/api/timeline');
-    expect(res.status).toBe(200);
-    expect(Array.isArray(res.body)).toBe(true);
-  });
-
-  it('GET /api/slides returns 200 with an array', async () => {
-    const res = await supertest(app).get('/api/slides');
+  it("GET /api/timeline returns 200 with an array", async () => {
+    const res = await supertest(app).get("/api/timeline");
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });
 
-  it('GET /api/scale-projections returns 200 with an array', async () => {
-    const res = await supertest(app).get('/api/scale-projections');
+  it("GET /api/slides returns 200 with an array", async () => {
+    const res = await supertest(app).get("/api/slides");
+    expect(res.status).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+  });
+
+  it("GET /api/scale-projections returns 200 with an array", async () => {
+    const res = await supertest(app).get("/api/scale-projections");
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });

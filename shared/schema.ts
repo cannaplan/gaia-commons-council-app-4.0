@@ -425,34 +425,69 @@ export const miningAlternative = pgTable("mining_alternative", {
 export const insertPilotStatsSchema = createInsertSchema(pilotStats).omit({ id: true });
 export const insertEndowmentStatsSchema = createInsertSchema(endowmentStats).omit({ id: true });
 export const insertTimelineEventSchema = createInsertSchema(timelineEvents).omit({ id: true });
-export const insertFinancialMetricsSchema = createInsertSchema(financialMetrics).omit({ id: true, updatedAt: true });
-export const insertClimateMetricsSchema = createInsertSchema(climateMetrics).omit({ id: true, updatedAt: true });
+export const insertFinancialMetricsSchema = createInsertSchema(financialMetrics).omit({
+  id: true,
+  updatedAt: true,
+});
+export const insertClimateMetricsSchema = createInsertSchema(climateMetrics).omit({
+  id: true,
+  updatedAt: true,
+});
 export const insertSlideSchema = createInsertSchema(slideDeck).omit({ id: true });
-export const insertHistoricalFinancialsSchema = createInsertSchema(historicalFinancials).omit({ id: true, createdAt: true });
+export const insertHistoricalFinancialsSchema = createInsertSchema(historicalFinancials).omit({
+  id: true,
+  createdAt: true,
+});
 export const insertSchoolClusterSchema = createInsertSchema(schoolClusters).omit({ id: true });
 export const insertSchoolSchema = createInsertSchema(schools).omit({ id: true });
 export const insertScaleProjectionSchema = createInsertSchema(scaleProjections).omit({ id: true });
-export const insertEnvironmentalImpactSchema = createInsertSchema(environmentalImpact).omit({ id: true });
+export const insertEnvironmentalImpactSchema = createInsertSchema(environmentalImpact).omit({
+  id: true,
+});
 export const insertJobCreationSchema = createInsertSchema(jobCreation).omit({ id: true });
 export const insertLegalFrameworkSchema = createInsertSchema(legalFramework).omit({ id: true });
-export const insertEndowmentProjectionSchema = createInsertSchema(endowmentProjections).omit({ id: true });
+export const insertEndowmentProjectionSchema = createInsertSchema(endowmentProjections).omit({
+  id: true,
+});
 export const insertExpandedJobsSchema = createInsertSchema(expandedJobs).omit({ id: true });
 export const insertK12CurriculumSchema = createInsertSchema(k12Curriculum).omit({ id: true });
-export const insertCoalitionPartnerSchema = createInsertSchema(coalitionPartners).omit({ id: true });
+export const insertCoalitionPartnerSchema = createInsertSchema(coalitionPartners).omit({
+  id: true,
+});
 export const insertFundingSourceSchema = createInsertSchema(fundingSources).omit({ id: true });
-export const insertTransparencyFeatureSchema = createInsertSchema(transparencyFeatures).omit({ id: true });
-export const insertAccountabilityMechanismSchema = createInsertSchema(accountabilityMechanisms).omit({ id: true });
-export const insertTribalPartnershipSchema = createInsertSchema(tribalPartnerships).omit({ id: true });
-export const insertImplementationTimelineSchema = createInsertSchema(implementationTimeline).omit({ id: true });
+export const insertTransparencyFeatureSchema = createInsertSchema(transparencyFeatures).omit({
+  id: true,
+});
+export const insertAccountabilityMechanismSchema = createInsertSchema(
+  accountabilityMechanisms,
+).omit({ id: true });
+export const insertTribalPartnershipSchema = createInsertSchema(tribalPartnerships).omit({
+  id: true,
+});
+export const insertImplementationTimelineSchema = createInsertSchema(implementationTimeline).omit({
+  id: true,
+});
 export const insertPoliticalRoadmapSchema = createInsertSchema(politicalRoadmap).omit({ id: true });
 export const insertStressTestSchema = createInsertSchema(stressTests).omit({ id: true });
-export const insertTieredCarbonPricingSchema = createInsertSchema(tieredCarbonPricing).omit({ id: true });
-export const insertRegenerativeAgricultureSchema = createInsertSchema(regenerativeAgriculture).omit({ id: true });
-export const insertNationwideFoodSecuritySchema = createInsertSchema(nationwideFoodSecurity).omit({ id: true });
+export const insertTieredCarbonPricingSchema = createInsertSchema(tieredCarbonPricing).omit({
+  id: true,
+});
+export const insertRegenerativeAgricultureSchema = createInsertSchema(regenerativeAgriculture).omit(
+  { id: true },
+);
+export const insertNationwideFoodSecuritySchema = createInsertSchema(nationwideFoodSecurity).omit({
+  id: true,
+});
 export const insertLaborTransitionSchema = createInsertSchema(laborTransition).omit({ id: true });
-export const insertPoliticalCoalitionSchema = createInsertSchema(politicalCoalition).omit({ id: true });
-export const insertGlobalRegenerationSummarySchema = createInsertSchema(globalRegenerationSummary).omit({ id: true });
-export const insertMiningAlternativeSchema = createInsertSchema(miningAlternative).omit({ id: true });
+export const insertPoliticalCoalitionSchema = createInsertSchema(politicalCoalition).omit({
+  id: true,
+});
+export const insertGlobalRegenerationSummarySchema = createInsertSchema(
+  globalRegenerationSummary,
+).omit({ id: true });
+export const insertMiningAlternativeSchema = createInsertSchema(miningAlternative).omit({
+  id: true,
+});
 
 // Planetary Boundaries (Steffen et al. 2015, updated Richardson et al. 2023)
 export const planetaryBoundaries = pgTable("planetary_boundaries", {
@@ -584,17 +619,32 @@ export const globalRegenerationRegions = pgTable("global_regeneration_regions", 
   impactHighlight: text("impact_highlight").notNull(),
 });
 
-export const insertGlobalRegenerationRegionSchema = createInsertSchema(globalRegenerationRegions).omit({ id: true });
+export const insertGlobalRegenerationRegionSchema = createInsertSchema(
+  globalRegenerationRegions,
+).omit({ id: true });
 
-
-export const insertPlanetaryBoundariesSchema = createInsertSchema(planetaryBoundaries).omit({ id: true });
-export const insertCalibrationTargetsSchema = createInsertSchema(calibrationTargets).omit({ id: true });
+export const insertPlanetaryBoundariesSchema = createInsertSchema(planetaryBoundaries).omit({
+  id: true,
+});
+export const insertCalibrationTargetsSchema = createInsertSchema(calibrationTargets).omit({
+  id: true,
+});
 export const insertModelMaturitySchema = createInsertSchema(modelMaturity).omit({ id: true });
-export const insertHistoricalClimateDataSchema = createInsertSchema(historicalClimateData).omit({ id: true });
-export const insertMonteCarloSimulationsSchema = createInsertSchema(monteCarloSimulations).omit({ id: true });
-export const insertScenarioComparisonsSchema = createInsertSchema(scenarioComparisons).omit({ id: true });
-export const insertOptimizationParamsSchema = createInsertSchema(optimizationParams).omit({ id: true });
-export const insertSensitivityAnalysisSchema = createInsertSchema(sensitivityAnalysis).omit({ id: true });
+export const insertHistoricalClimateDataSchema = createInsertSchema(historicalClimateData).omit({
+  id: true,
+});
+export const insertMonteCarloSimulationsSchema = createInsertSchema(monteCarloSimulations).omit({
+  id: true,
+});
+export const insertScenarioComparisonsSchema = createInsertSchema(scenarioComparisons).omit({
+  id: true,
+});
+export const insertOptimizationParamsSchema = createInsertSchema(optimizationParams).omit({
+  id: true,
+});
+export const insertSensitivityAnalysisSchema = createInsertSchema(sensitivityAnalysis).omit({
+  id: true,
+});
 
 // === TYPES ===
 
