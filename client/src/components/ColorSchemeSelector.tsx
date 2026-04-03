@@ -7,11 +7,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { useColorScheme, colorSchemes } from "@/lib/theme-context";
+import { useTheme, colorSchemes } from "@/lib/theme-context";
 
 export function ColorSchemeSelector() {
   const { t } = useTranslation();
-  const { colorScheme, setColorScheme } = useColorScheme();
+  const { colorScheme, setColorScheme } = useTheme();
 
   return (
     <DropdownMenu>

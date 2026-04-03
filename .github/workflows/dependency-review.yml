@@ -19,6 +19,3 @@ jobs:
         uses: actions/dependency-review-action@v4
         with:
           fail-on-severity: high
-          allow-ghsas: ""
-          # Allow GitHub Actions with unknown licenses so they aren't flagged
-          allow-dependencies-licenses: ""
